@@ -24,7 +24,7 @@ unset color_prompt force_color_prompt
 
 # if path is existed, add it to PATH.
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
-    export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+    export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:
 fi
 
 alias ls="ls --auto-color"
