@@ -25,6 +25,9 @@ fi
 if [[ "$DRYRUN" != "" ]]; then echo dotfiles:; fi
 DOTFILES="$(ls -dF .[^.]* | grep -v /)"
 for i in $DOTFILES; do
+    if [[ "$i" == ".gitignore" ]] ; then
+        continue;
+    fi
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/$i
 done
 
