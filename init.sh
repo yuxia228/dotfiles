@@ -34,7 +34,7 @@ for i in $DOTDIRS; do
     if [[ "$i" == ".git/" ]] ; then
         continue;
     fi
-    ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/$i
+    ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/
 done
 
 
