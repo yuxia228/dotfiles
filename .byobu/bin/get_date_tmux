@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DATE=`date +%C/%m/%d`
+#WOD_NUM=`date +%w` # 0:Sunday - 6: Satur day
+WOD=`LANG=C date | cut -f1 -d' '`
+
+echo "${DATE}(${WOD})"
+

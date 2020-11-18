@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# param
+VOLUME_MAX=10
+
+# unchangable variable
+DIV_NUM=`expr 100 / $VOLUME_MAX - 1`
+
+# DIY script for linux
+mute=`amixer sget Master | grep % | head -1 | cut -d':' -f2| cut -d ' ' -f6 | sed "s/[^0-9a-z]//g"`
+vol=`amixer sget Master | grep % | head -1 | cut -d':' -f2| cut -d ' ' -f4 | sed "s/[^0-9]//g"`
+#echo $vol : $mute
+sound_info=$vol" "$mute
+#echo $sound_info
+if [ "$sound_info" != "" ]; then
+  sound_volume=`expr $(echo $sound_info | awk '{print $1}') / $DIV_NUM`
+  #echo $sound_volume
+  str=""
+  if [ "`echo $sound_info | awk '{print $2}'`" != "off" ]; then
+    for i in `seq 0 $sound_volume`; do
+      # str="${str}■"
+      str="${str}█"
+    done
+    for i in `seq $sound_volume $VOLUME_MAX`; do
+      str="${str} "
+    done
+    sound="#[bold][$str]#[default] "
+  else
+    MUTE="Mute"
+    MUTE_LEN=$( expr ${#MUTE} / 2 )
+    MSG="#[fg=colour123]${MUTE}#[default]" # 赤っぽい色
+    for i in `seq 0 $(expr $VOLUME_MAX / 2 - ${MUTE_LEN} )`; do
+      str="${str} "
+    done
+    str="$str$MSG"
+    for i in `seq $(expr $VOLUME_MAX / 2 + ${MUTE_LEN} ) $VOLUME_MAX`; do
+      str="${str} "
+    done
+    sound="#[bold][$str]#[default] "
+  fi
+  echo "$sound"
+fi
+
+# oroginal script for mac 
+# if sound_info=$(osascript -e 'get volume settings') ; then
+#   if [ "$(echo $sound_info | awk '{print $8}')" = "muted:false" ]; then
+#     sound_volume=$(expr $(echo $sound_info | awk '{print $2}' | sed "s/[^0-9]//g") / 6 )
+#     str=""
+#     for ((i=0; i < $sound_volume; i++ )); do
+#       str="${str}■"
+#     done
+#     for ((i=$sound_volume; i < 16; i++ )); do
+#       str="${str} "
+#     done
+#     sound="#[bold][$str]#[default] "
+#   else
+#     sound="#[bold][      mute      ]#[default] "
+#   fi
+#   echo $sound
+# fi
+

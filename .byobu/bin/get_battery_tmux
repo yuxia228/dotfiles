@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+# 自動pip installer　足りないモジュールを自分でインストール
+try:
+    import psutil
+except ModuleNotFoundError:
+    import site
+    import importlib
+    try:
+        import pip
+        pip.main(['install', '--user', 'psutil'])  # pip install --user module
+    except AttributeError:
+        from pip._internal.main import main as pipmain
+        pipmain(['install', '--user', 'psutil'])  # pip install --user module
+    importlib.reload(site)                     # sys.pathをリフレッシュする
+    import psutil
+
+# バッテリー残量
+bat_icon = ["▁", "▂", "▄", "▆", "█"]
+icon = ""
+color_list = ["colour9", "colour166", "colour3", "colour106", "colour40"]
+bgcolor = "black"
+btr = psutil.sensors_battery()
+str = ""
+try:
+    battery = btr.percent  # 0~100
+    str = "{}%".format(battery)
+    bat_level = (battery-1) // 20
+    icon = bat_icon[bat_level]
+    bgcolor = color_list[bat_level]
+    if btr.power_plugged is True:
+        icon = "⚡" + icon
+    # print(str)
+except AttributeError:
+    # print("No battery on this system.")
+    str = " AC "
+    bgcolor = "blue"
+    # print(str)
+print("#[bg={bg}]{icon}{percent:>4}#[default]".format(
+    icon=icon, bg=bgcolor, percent=str))
+quit()

@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import urllib.request
+import datetime
+# 自動pip installer　足りないモジュールを自分でインストール
+try:
+    from bs4 import BeautifulSoup
+except ModuleNotFoundError:
+    import site
+    import importlib
+    try:
+        import pip
+        pip.main(['install', '--user', 'BeautifulSoup4'])  # pip install --user module
+    except AttributeError:
+        from pip._internal.main import main as pipmain
+        pipmain(['install', '--user', 'BeautifulSoup4'])  # pip install --user module
+    importlib.reload(site)                     # sys.pathをリフレッシュする
+    from bs4 import BeautifulSoup
+
+fname = "/dev/shm/nikkei_ave"
+
+dt_now = datetime.datetime.now()
+if (dt_now.second%10) != 0 :
+    try:
+        with open(fname, 'r') as f:
+            print(f.read())
+        quit()
+    except FileNotFoundError:
+        pass
+
+url =  "http://www.nikkei.com/markets/kabu/"
+html = urllib.request.urlopen(url)
+soup = BeautifulSoup(html,"html.parser")
+nikkei = soup.find(class_="mkc-prices").find_all('span')
+nikkei_ave = nikkei[0].string
+up_down = nikkei[1].string[1:]
+msg = "{}:{}".format(nikkei_ave, up_down)
+
+print(msg)
+with open(fname, mode='w') as f:
+    f.write(msg)

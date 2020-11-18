@@ -1,0 +1,42 @@
+#!/bin/bash
+
+WEATHER_FILE=/dev/shm/weather
+# if [ "`date +"%S"`" != "00" ]; then ### EVERY 1MIN
+# if [ "`date +"%M%S"`" != "0000" ]; then ### EVERY 60MIN
+if [ "`date +"%M%S" | cut -b2-4`" != "000" ]; then ### EVERY 10MIN
+    if [ -e $WEATHER_FILE ]; then
+        # echo -n " dummy "
+        cat $WEATHER_FILE
+        exit
+    fi
+fi
+
+## JAPANESE
+# export WEATHER=`curl  -H "Accept-Language: ${LANG%_*}" -s "http://wttr.in?format='%C+%c+%t+%o'"` # with emoji
+# export WEATHER=`curl  -H "Accept-Language: ${LANG%_*}" -s "http://wttr.in?format='%C+%t+%o'"` # without emoji
+## ENGILSH
+export WEATHER=`curl -s "http://wttr.in?format='%C+%t+%o'"`
+WEATHER=`echo $WEATHER | cut -d "'" -f2 | rev | cut -c 5- | rev `
+WAATHER=`echo "$WEATHER deg"`
+
+echo $WEATHER | grep Sorry 2>&1 > /dev/null
+if [ $? = 0 ]; then
+    WEATHER="Weather Service Down..."
+    echo $WEATHER
+    echo $WEATHER > $WEATHER_FILE
+    exit
+fi
+
+echo $WEATHER | grep "</html>" 2>&1 > /dev/null
+if [ $? = 0 ]; then
+    WEATHER="Weather Service Down..."
+    echo $WEATHER
+    echo $WEATHER > $WEATHER_FILE
+    exit
+fi
+
+echo $WEATHER
+echo $WEATHER > $WEATHER_FILE
+
+exit
+
