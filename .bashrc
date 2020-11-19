@@ -1,6 +1,7 @@
 export PATH=$PATH:${HOME}/bin
 
 # Color List
+ESC=`printf "\033"`
 BLACK="${ESC}[30m"
 RED="${ESC}[31m"
 GREEN="${ESC}[32m"
