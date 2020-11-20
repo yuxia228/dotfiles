@@ -18,6 +18,12 @@ set shiftwidth=4       "自動インデントでずれる幅"
 set expandtab          "タブ入力を複数の空白入力に置き換える"
 filetype plugin indent on
 
+" 検索関係
+set incsearch
+set ignorecase
+set smartcase
+
+
 " statusbarセッテイング
 set laststatus=2       "ステータスラインの表示"
 function! SetStatusLine()
