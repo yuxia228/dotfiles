@@ -34,10 +34,18 @@ done
 if [[ "$DRYRUN" != "" ]]; then echo dotdirs:; fi
 DOTDIRS="$(ls -dF .[^.]* | grep /)"
 for i in $DOTDIRS; do
-    if [[ "$i" == ".git/" ]] ; then
+    if [[ "$i" == ".git/" ]] || [[ "$i" == ".config/" ]]; then
         continue;
     fi
     ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/
 done
+
+if [[ "$DRYRUN" != "" ]]; then echo dotconfigs:; fi
+DOTCONFIGS="$( ls -dF .config/[^.]* | grep /)"
+mkdir -p ${HOME}/.config
+for i in $DOTCONFIGS; do
+    ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/.config/
+done
+
 
 
