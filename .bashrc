@@ -1,3 +1,7 @@
+#
+# .bashrc
+#
+
 export PATH=$PATH:${HOME}/bin
 
 # Color List
@@ -11,6 +15,23 @@ MAGENTA="${ESC}[35m"
 CYAN="${ESC}[36m"
 WHITE="${ESC}[37m"
 RESET="${ESC}[m"
+
+set_term () {
+    _terms=(xterm-256color xterm-16color xterm)
+    for t in "${_terms[@]}";do
+        infocmp $t
+        if infocmp $t >&/dev/null;then
+            break
+        else
+            export TERM=$t
+        fi
+    done
+}
+
+if [ "$TERM" == "alacritty" ]; then
+    TERM=xterm-256color
+    set_term
+fi
 
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -27,8 +48,6 @@ unset color_prompt force_color_prompt
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
     export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin:
 fi
-
-alias ls="ls --auto-color"
 
 # Functions
 csv_viewer () {
