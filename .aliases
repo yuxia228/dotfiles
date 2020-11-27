@@ -3,8 +3,8 @@
 #
 
 CommandChecker () {
-    CMD=$1
-    if [[ `which $COMMAND` != "" ]] && [[ `which $COMMAND` != "$COMMAND not found" ]]; then
+    COMMAND=$1
+    if [ -x $COMMAND ]; then
         return 0
     else
         return -1
@@ -18,28 +18,22 @@ if [ "`echo "$p" | grep 'zsh'`" != "" ] ; then
     SHELL_ZSH="true"
 fi
 
-if [[ `which colordiff` != "" ]]; then
+if CommandChecker "colordiff" ; then
     alias diff='colordiff -up'
 fi
 
 if CommandChecker "nvim" ; then
-    echo `which nvim`
     alias vim='nvim'
     alias vimdiff='nvim -d '
 fi
 
-# if [[ `which $COMMAND` != "" ]] && [[ `which $COMMAND` != "$COMMAND not found" ]] ; then
 if CommandChecker "tig" ; then
     :
-elif [ -f "/home/linuxbrew/.linuxbrew/bin/$COMMAND" ]; then
+elif [ -x "/home/linuxbrew/.linuxbrew/bin/$COMMAND" ]; then
     alias $COMMAND="/home/linuxbrew/.linuxbrew/bin/$COMMAND"
 fi
 
-# if [ -f "/home/linuxbrew/.linuxbrew/bin/tmux" ]; then
-#     alias tmux="/home/linuxbrew/.linuxbrew/bin/tmux"
-# fi
-
-if [[ `which peco` != "" ]]; then
+if CommandChecker "peco" ; then
     if [[ "$SHELL_ZSH" == "true" ]]; then
         bindkey '^r' cool-peco-history # ctrl+r
         bindkey '^h' cool-peco-ssh
@@ -53,13 +47,13 @@ if [[ `which peco` != "" ]]; then
     alias cg=cool-peco-ghq
     alias cdd=peco-cd
 
-    if [[ `which ghq` != "" ]]; then
+    if CommandChecker "ghq" ; then
         alias g='cd $(ghq root)/$(ghq list | peco)'
     fi
 fi
 
-
 # personal setting
+alias l='ls --color=auto'
 alias ls='ls --color=auto'
 alias la='ls -A'
 alias ll='ls -alF'
@@ -72,7 +66,7 @@ alias git_latest_tag='git describe --abbrev=0 --tags'
 alias dd='dd status=progress'
 alias sshh="ssh -o 'StrictHostKeyChecking no'"
 
-if [[ `which tree` != "" ]]; then
+if CommandChecker "tree" ; then
     alias tree="pwd ; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'"
 fi
 
