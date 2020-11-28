@@ -2,7 +2,7 @@
 # .bashrc
 #
 
-source .commonrc
+source ${HOME}/.commonrc
 
 # Color List
 ESC=`printf "\033"`
