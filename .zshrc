@@ -9,6 +9,9 @@ source ${HOME}/.commonrc
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+if [ ! -d $ZSH ];then
+    git clone https://github.com/ohmyzsh/ohmyzsh $ZSH
+fi
 
 plugins=(git)
 
