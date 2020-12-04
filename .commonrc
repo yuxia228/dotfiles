@@ -1,17 +1,42 @@
 #!/bin/sh
 
+update_dotfiles () {
+    $(\
+        cd `readlink ${HOME}/.commonrc | xargs dirname`; \
+        git pull \
+    )
+}
+
 check_dotfiles_update () {
     echo Checking updataing for dotfiles ...
     RET=$(cd `readlink ${HOME}/.commonrc | xargs dirname`; \
           git remote show origin | grep 'out of date')
     if [[ "$RET" != "" ]]; then
         echo "=> dotfiles is out of date."
-        git pull
+        update_dotfiles
     else
         echo "=> dotfiles is up to date."
     fi
 }
-check_dotfiles_update
+check_dotfiles_update_using_github_api () {
+    echo Checking updataing for dotfiles ...
+    LATEST_SHA=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/yuxia228/dotfiles/commits/master \
+        | grep sha \
+        | head -1 \
+        | cut -d'"' -f 4
+    )
+    CURRENT_SHA=$(cd `readlink ${HOME}/.commonrc | xargs dirname`; \
+        git log | head -1 | awk '{print $2}'
+    )
+    if [ "$LATEST_SHA" != "$CURRENT_SHA" ];then
+        echo "=> dotfiles is out of date."
+        update_dotfiles
+    else
+        echo "=> dotfiles is up to date."
+    fi
+}
+check_dotfiles_update_using_github_api
 
 export PATH=$PATH:${HOME}/bin
 if [ -e /home/linuxbrew/.linuxbrew/bin ]; then
