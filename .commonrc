@@ -71,6 +71,10 @@ csv_viewer () {
     column -s, -t < $1 | less -#2 -N -S
 }
 
+cdup(){
+      cd `for i in $(seq 0 $(pwd | awk -F/ '{print NF}')); do pwd | grep -oE "^/([^/]*/){$i}" ; done | peco`
+}
+
 peco-cd () {
     local sw="1"
     while [ "$sw" != "0" ]; do
