@@ -1,5 +1,4 @@
 #!/bin/sh
-
 update_dotfiles () {
     $(\
         cd `readlink ${HOME}/.commonrc | xargs dirname`; \
@@ -13,7 +12,12 @@ check_dotfiles_update () {
           git remote show origin | grep 'out of date')
     if [[ "$RET" != "" ]]; then
         echo "=> dotfiles is out of date."
-        update_dotfiles
+        read -n 1 -t 3 -p "Do you update dotfiles[Yn](skip after 3s) ? > " key || key="n"
+        if [[ "$key" == "" ]]; then echo; fi
+        case "$key" in
+            [Yy]|"" ) update_dotfiles ;;
+            * ) echo "Skipped" ;;
+        esac
     else
         echo "=> dotfiles is up to date."
     fi
