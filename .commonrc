@@ -1,9 +1,10 @@
 #!/bin/sh
 update_dotfiles () {
-    $(\
+    RET=$(\
         cd `readlink ${HOME}/.commonrc | xargs dirname`; \
         git pull \
     )
+    echo $RET
 }
 
 check_dotfiles_update () {
