@@ -13,7 +13,7 @@ check_dotfiles_update () {
           git remote show origin | grep 'out of date')
     if [[ "$RET" != "" ]]; then
         echo "=> dotfiles is out of date."
-        read -n 1 -t 3 -p "Do you update dotfiles[Yn](skip after 3s) ? > " key || key="n"
+        read -n 1 -t 3 -p "Do you update dotfiles? [Press Enter to continue](skip after 3s) > " key || key="n"
         if [[ "$key" == "" ]]; then echo; fi
         case "$key" in
             [Yy]|"" ) update_dotfiles ;;
