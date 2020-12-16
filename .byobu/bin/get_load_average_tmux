@@ -7,7 +7,7 @@ load_ave=`uptime | awk '{print $(NF-2)}' | cut -d, -f1`
 core_num=`grep processor /proc/cpuinfo | wc -l`
 # load_ave=5.6
 if [ "`echo "$load_ave < ($core_num * 0.4)" | bc`" -eq "1" ]; then
-    color=green
+    color=blue
 elif [ "`echo "$load_ave < ($core_num * 0.7)" | bc`" -eq "1" ]; then
     color=yellow
 elif [ "`echo "$load_ave < ($core_num * 1.0)" | bc`" -eq "1" ]; then
@@ -16,4 +16,5 @@ else
     color=red
 fi
 
-echo "(#[bg=$color]$load_ave#[default])" 
+echo "(#[bg=$color]$load_ave#[default])"
+
