@@ -8,6 +8,12 @@ update_dotfiles () {
 }
 
 check_dotfiles_update () {
+    timeout 1 ping www.google.com -c 1 > dev.null
+    if [ $? -ne 0 ]; then
+        echo "Network is not available."
+        echo "Skip checking update of dotfiles"
+        return -1
+    fi
     echo Checking updataing for dotfiles ...
     RET=$(cd `readlink ${HOME}/.commonrc | xargs dirname`; \
           git remote show origin | grep 'out of date')
@@ -24,6 +30,13 @@ check_dotfiles_update () {
     fi
 }
 check_dotfiles_update_using_github_api () {
+    timeout 1 ping www.google.com -c 1 > dev.null
+    if [ $? -ne 0 ]; then
+        echo "Network is not available."
+        echo "Skip checking update of dotfiles"
+        return -1
+    fi
+
     echo Checking updataing for dotfiles ...
     LATEST_SHA=$(curl -s -H "Accept: application/vnd.github.v3+json" \
         https://api.github.com/repos/yuxia228/dotfiles/commits/master \
