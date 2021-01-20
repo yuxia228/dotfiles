@@ -1,4 +1,6 @@
 #!/bin/sh
+export EDITOR=${EDITOR:-vim}
+
 update_dotfiles () {
     RET=$(\
         cd `readlink ${HOME}/.commonrc | xargs dirname`; \
@@ -8,7 +10,7 @@ update_dotfiles () {
 }
 
 check_dotfiles_update () {
-    timeout 1 ping www.google.com -c 1 > dev.null
+    timeout 1 ping www.google.com -c 1 > /dev/null
     if [ $? -ne 0 ]; then
         echo "Network is not available."
         echo "Skip checking update of dotfiles"
@@ -30,7 +32,7 @@ check_dotfiles_update () {
     fi
 }
 check_dotfiles_update_using_github_api () {
-    timeout 1 ping www.google.com -c 1 > dev.null
+    timeout 1 ping www.google.com -c 1 > /dev/null
     if [ $? -ne 0 ]; then
         echo "Network is not available."
         echo "Skip checking update of dotfiles"
