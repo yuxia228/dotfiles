@@ -9,37 +9,12 @@ update_dotfiles () {
     echo $RET
 }
 
-check_dotfiles_update () {
-    timeout 1 ping www.google.com -c 1 > /dev/null
-    if [ $? -ne 0 ]; then
-        echo "Network is not available."
-        echo "Skip checking update of dotfiles"
-        return -1
-    fi
-    echo Checking updataing for dotfiles ...
-    RET=$(cd `readlink ${HOME}/.commonrc | xargs dirname`; \
-          git remote show origin | grep 'out of date')
-    if [[ "$RET" != "" ]]; then
-        echo "=> dotfiles is out of date."
-        read -n 1 -t 3 -p "Do you update dotfiles? [Press Enter to continue](skip after 3s) > " key || key="n"
-        if [[ "$key" == "" ]]; then echo; fi
-        case "$key" in
-            [Yy]|"" ) update_dotfiles ;;
-            * ) echo "Skipped" ;;
-        esac
-    else
-        echo "=> dotfiles is up to date."
-    fi
-}
 check_dotfiles_update_using_github_api () {
     timeout 1 ping www.google.com -c 1 > /dev/null
     if [ $? -ne 0 ]; then
-        echo "Network is not available."
-        echo "Skip checking update of dotfiles"
         return -1
     fi
 
-    echo Checking updataing for dotfiles ...
     LATEST_SHA=$(curl -s -H "Accept: application/vnd.github.v3+json" \
         https://api.github.com/repos/yuxia228/dotfiles/commits/master \
         | grep sha \
@@ -50,15 +25,8 @@ check_dotfiles_update_using_github_api () {
         git log | head -1 | awk '{print $2}'
     )
     if [ "$LATEST_SHA" != "$CURRENT_SHA" ];then
-        echo "=> dotfiles is out of date."
-        read -n 1 -t 3 -p "Do you update dotfiles[Yn](skip after 3s) ? > " key || key="n"
-        if [[ "$key" == "" ]]; then echo; fi
-        case "$key" in
-            [Yy]|"" ) update_dotfiles ;;
-            * ) echo "Skipped" ;;
-        esac
-    else
-        echo "=> dotfiles is up to date."
+        echo "dotfiles is out of date."
+        echo "=> Please update dotfiles to run 'update_dotfiles' on shell"
     fi
 }
 check_dotfiles_update_using_github_api
