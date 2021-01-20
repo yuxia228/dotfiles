@@ -47,5 +47,5 @@ for i in $DOTCONFIGS; do
     ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/.config/
 done
 
-
+echo "=> dotfiles are installed."
 
