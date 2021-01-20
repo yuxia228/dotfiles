@@ -64,6 +64,10 @@ csv_viewer () {
     column -s, -t < $1 | less -#2 -N -S
 }
 
+if [[ ! -x `which peco` ]]; then
+    return
+fi
+
 cdup(){
       cd `for i in $(seq 0 $(pwd | awk -F/ '{print NF}')); do pwd | grep -oE "^/([^/]*/){$i}" ; done | peco`
 }
