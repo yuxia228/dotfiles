@@ -2,10 +2,13 @@
 export EDITOR=${EDITOR:-vim}
 DOTFILES_DIR=`readlink ${HOME}/.commonrc | xargs dirname`
 update_dotfiles () {
+    echo Updating dotfiles
     RET=$(\
         cd ${DOTFILES_DIR}; git pull \
     )
-    echo $RET
+    echo "$RET"
+    echo Rerun init.sh ...
+    ${DOTFILES_DIR}/init.sh
 }
 
 check_dotfiles_update_using_github_api () {
