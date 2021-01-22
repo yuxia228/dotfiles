@@ -1,3 +1,5 @@
+scriptencoding utf-8
+set encoding=utf-8
 set t_Co=256           "screen が 256色"
 colorscheme desert    " colorscheme
 set background=dark
