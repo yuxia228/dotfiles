@@ -15,6 +15,8 @@ Usage () {
 
 git_config () {
     git config core.hooksPath ${HOME}/.githooks
+    git config --global core.editor vim
+    git config --global commit.verbose true
 }
 
 if [[ "$(echo $*|grep -e --help -e -h)" != "" ]]; then
