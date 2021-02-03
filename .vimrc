@@ -140,6 +140,21 @@ endif
 set noswapfile
 set nobackup
 
+function! OpenFunctionList()
+    let basename = expand("%:t") " :h=> path, :t=>filename
+    vimgrep def %
+    copen
+    set modifiable
+    setlocal nowrap
+    silent! exec '%s;.*[a-zA-Z]|;' . basename . ' |;'
+endfunction
+
+command OpenFunctionList :call OpenFunctionList()
+noremap <C-W> <C-O>:call OpenFunctionList()<CR>
+
+" Auto-close quickfix when item in quickfix is selected.
+autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+
 " colorscheme edit
 " molokaiに近づける
 " autocmd ColorSchemeをつけるとnvimに影響を及ぼすからつけない
