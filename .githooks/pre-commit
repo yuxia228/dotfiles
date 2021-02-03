@@ -1,0 +1,29 @@
+#!/bin/bash
+
+REMOTE_ORIGIN_URL=$(git config --local remote.origin.url | cut -d'/' -f1)
+
+GIT_URL="git@github.com:yuxia228"
+GIT_USER_NAME="yuxia228"
+GIT_USER_EMAIL="yuxia228@gmail.com"
+
+USER_NAME=`git config user.name`
+USER_EMAIL=`git config user.email`
+
+ERROR () {
+    echo "git config is wrong."
+    echo "    user.name  is $USER_NAME"
+    echo "    user.email is $USER_EMAIL"
+    echo "Please execute following commands"
+    echo "    git config --local user.name $GIT_USER_NAME"
+    echo "    git config --local user.email $GIT_USER_EMAIL"
+    exit 1
+}
+
+if [[ "$USER_NAME" != "$GIT_USER_NAME" ]]; then
+    ERROR
+elif [[ "$USER_EMAIL" != "$GIT_USER_EMAIL" ]]; then
+    ERROR
+fi
+
+exit 0
+

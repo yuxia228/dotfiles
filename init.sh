@@ -13,6 +13,10 @@ Usage () {
     echo "  -d|--dry-run : Dry-run"
 }
 
+git_config () {
+    git config core.hooksPath ${HOME}/.githooks
+}
+
 if [[ "$(echo $*|grep -e --help -e -h)" != "" ]]; then
     Usage; exit;
 fi
@@ -46,6 +50,8 @@ mkdir -p ${HOME}/.config
 for i in $DOTCONFIGS; do
     ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/.config/
 done
+
+git_config
 
 echo "=> dotfiles are installed."
 
