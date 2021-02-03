@@ -14,7 +14,7 @@ Usage () {
 }
 
 git_config () {
-    git config core.hooksPath ${HOME}/.githooks
+    git config --global core.hooksPath ${HOME}/.githooks
     git config --global core.editor vim
     git config --global commit.verbose true
 }
