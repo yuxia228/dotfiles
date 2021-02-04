@@ -18,6 +18,8 @@ git_config () {
     git config --global core.editor vim
     git config --global commit.verbose true
     git config --global pull.ff only
+    git config --global alias.tree "log --graph --all \
+        --format='%x09%C(cyan bold)%an%Creset%x09%C(yellow)%h%Creset %C(magenta reverse)%d%Creset %s'"
 }
 
 if [[ "$(echo $*|grep -e --help -e -h)" != "" ]]; then
