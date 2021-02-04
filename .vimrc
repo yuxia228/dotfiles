@@ -1,7 +1,11 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" .vimrc
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 scriptencoding utf-8
 set encoding=utf-8
 set t_Co=256           "screen が 256色"
-colorscheme desert    " colorscheme
 set background=dark
 set number             "桁表示"
 set backspace=indent,eol,start
@@ -19,55 +23,15 @@ set softtabstop=4      "連続した空白に対してタブキーやバック�
 set shiftwidth=4       "自動インデントでずれる幅"
 set expandtab          "タブ入力を複数の空白入力に置き換える"
 filetype plugin indent on
+syntax on
 
 " 検索関係
 set incsearch
 set ignorecase
 set smartcase
 
-
-" statusbarセッテイング
-set laststatus=2       "ステータスラインの表示"
-function! SetStatusLine()
-    if mode() is# 'i'
-        let c = 1
-        let mode_name = 'Insert'
-    elseif mode() is# 'n'
-        let c = 2
-        let mode_name = 'Normal'
-    elseif mode() is# 'R'
-        let c = 3
-        let mode_name = 'Replace'
-    elseif mode() is# 'V'
-        let c = 4
-        let mode_name = 'V-Line'
-    elseif mode() ==# "\<C-V>"
-        let c = 4
-        let mode_name = 'V-Block'
-    else
-        let c = 4
-        let mode_name = 'Visual'
-    endif
-    "return '%' . c . '*[' . mode_name . ']%* %<%F%=%m%r %18([%{toupper(&ft)}][%l/%L]%)'
-    let statusline_l = '%' . c . '* ' . mode_name . ' %*' . '%9* %<%F %m %*'
-    "let statusline_r = '[%p%% %l/%L] [TYPE:%{&ft}] [FILE:%f] [ENC:%{&fileencoding}] [LF:%{&fileformat}]'
-    let statusline_r = '%{&ft} %7* %3.3p%%%4.4l/%0.4L %*%8* %{&fileencoding}[%{&fileformat}] %*'
-    return statusline_l . '%=' . statusline_r
-endfunction
-" For Mode
-highlight User1 gui=bold guibg=red guifg=white   ctermbg=81 ctermfg=233 cterm=bold
-highlight User2 gui=bold guibg=blue guifg=white  ctermbg=184 ctermfg=233 cterm=bold
-highlight User3 gui=bold guibg=coral guifg=white ctermbg=166 ctermfg=233 cterm=bold
-highlight User4 gui=bold guibg=green guifg=black ctermbg=76 ctermfg=233 cterm=bold
-" For statusbar bg color
-highlight StatusLine gui=bold guibg=green guifg=black ctermbg=238 ctermfg=250 cterm=bold
-highlight User7 gui=bold guibg=green guifg=black ctermbg=81 ctermfg=233 cterm=bold
-highlight User8 gui=bold guibg=green guifg=black ctermbg=235 ctermfg=250 cterm=bold
-highlight User9 gui=bold guibg=green guifg=black ctermbg=238 ctermfg=250 cterm=bold
-
-set statusline=%!SetStatusLine() " 左寄せ
+" Cursor Line Config
 set cursorline         "横のカーソルライン表示"
-
 "set cursorcolumn       "縦のカーソルライン表示"
 
 set ambiwidth=double
@@ -91,7 +55,6 @@ set ignorecase                              " 検索時に大文字小文字を�
 set smartcase                               " 大文字小文字の両方が含まれている場合は大文字小文字を区別
 set wrapscan                                " 検索時にファイルの最後まで行ったら最初に戻る (nowrapscan:戻らない)
 set hlsearch                                " 検索結果をハイライト
-
 
 " swap x and gx (gx is supported moving in wrapping text)
 nnoremap j gj
@@ -122,15 +85,8 @@ nnoremap <silent> \ %
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue ctermbg=238 guibg=#666666
 au BufNewFile,BufRead * match ZenkakuSpace /　/
 
-" 80文字以降と75文字ラインを作成
-"set colorcolumn=+1
-highlight ColorColumn guibg=#606030 ctermbg=238
-noremap <Plug>(ToggleColorColumn)
-            \ :<c-u>let &colorcolumn = len(&colorcolumn) > 0 ? '' :
-            \   '76,' . join(range(81, 300), ',')<CR>
-" ノーマルモードの 'cc' に割り当てる
-nmap cc <Plug>(ToggleColorColumn)
-
+" Auto-close quickfix when item in quickfix is selected.
+autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 if has('persistent_undo')
     let undo_path = expand('~/.vim/undo')
@@ -140,73 +96,19 @@ endif
 set noswapfile
 set nobackup
 
-function! OpenFunctionList()
-    let basename = expand("%:t") " :h=> path, :t=>filename
-    vimgrep def %
-    copen
-    set modifiable
-    setlocal nowrap
-    silent! exec '%s;.*[a-zA-Z]|;' . basename . ' |;'
-endfunction
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" include block
+"""""""""""""""""""""""""""""""""""""""""""""""""
+if filereadable(expand('~/.vim/rc/statusbar.vim'))
+    source ~/.vim/rc/statusbar.vim
+endif
 
-command OpenFunctionList :call OpenFunctionList()
-noremap <C-W> <C-O>:call OpenFunctionList()<CR>
+if filereadable(expand('~/.vim/rc/colorscheme.vim'))
+    source ~/.vim/rc/colorscheme.vim
+endif
 
-" Auto-close quickfix when item in quickfix is selected.
-autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+if filereadable(expand('~/.vim/rc/utils.vim'))
+    source ~/.vim/rc/utils.vim
+endif
 
-" colorscheme edit
-" molokaiに近づける
-" autocmd ColorSchemeをつけるとnvimに影響を及ぼすからつけない
-highlight Comment ctermfg=59
-highlight Function ctermfg=118
-highlight Identifier ctermfg=208 cterm=none
-highlight Constant ctermfg=135 cterm=bold
-highlight String ctermfg=142
-highlight Special ctermfg=81
-highlight Statement ctermfg=161 cterm=bold
-highlight Type ctermfg=81 cterm=none
-highlight PreProc ctermfg=118
-
-" For syntax group get
-function! s:get_syn_id(transparent)
-    let synid = synID(line("."), col("."), 1)
-    if a:transparent
-        return synIDtrans(synid)
-    else
-        return synid
-    endif
-endfunction
-
-function! s:get_syn_attr(synid)
-    let name = synIDattr(a:synid, "name")
-    let ctermfg = synIDattr(a:synid, "fg", "cterm")
-    let ctermbg = synIDattr(a:synid, "bg", "cterm")
-    let guifg = synIDattr(a:synid, "fg", "gui")
-    let guibg = synIDattr(a:synid, "bg", "gui")
-    return {
-        \ "name": name,
-        \ "ctermfg": ctermfg,
-        \ "ctermbg": ctermbg,
-        \ "guifg": guifg,
-        \ "guibg": guibg}
-endfunction
-
-function! s:get_syn_info()
-    let baseSyn = s:get_syn_attr(s:get_syn_id(0))
-    echo "name: " . baseSyn.name .
-        \ " ctermfg: " . baseSyn.ctermfg .
-        \ " ctermbg: " . baseSyn.ctermbg .
-        \ " guifg: " . baseSyn.guifg .
-        \ " guibg: " . baseSyn.guibg
-    let linkedSyn = s:get_syn_attr(s:get_syn_id(1))
-    echo "link to"
-    echo "name: " . linkedSyn.name .
-        \ " ctermfg: " . linkedSyn.ctermfg .
-        \ " ctermbg: " . linkedSyn.ctermbg .
-        \ " guifg: " . linkedSyn.guifg .
-        \ " guibg: " . linkedSyn.guibg
-endfunction
-
-command! SyntaxInfo call s:get_syn_info()
 
