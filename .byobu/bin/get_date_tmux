@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATE=`date +%C/%m/%d`
+DATE=`date +%y/%m/%d`
 #WOD_NUM=`date +%w` # 0:Sunday - 6: Satur day
 WOD=`LANG=C date | cut -f1 -d' '`
 
