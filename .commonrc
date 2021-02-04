@@ -6,7 +6,7 @@ DOTFILES_DIR=`readlink ${HOME}/.commonrc | xargs dirname`
 update_dotfiles () {
     echo Updating dotfiles
     RET=$(\
-        cd ${DOTFILES_DIR}; git pull \
+        cd ${DOTFILES_DIR}; git remote prune origin; git pull \
     )
     echo "$RET"
     echo Rerun init.sh and reload .${SHELL}rc
