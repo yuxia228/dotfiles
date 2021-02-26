@@ -81,6 +81,9 @@ nmap g# g#zz
 " \ を %に割当
 nnoremap <silent> \ %
 
+" Shift + tab: move tab
+nnoremap <silent> <S-T> :tabnext<CR>
+
 " 全角スペース可視化
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue ctermbg=238 guibg=#666666
 au BufNewFile,BufRead * match ZenkakuSpace /　/
@@ -88,6 +91,7 @@ au BufNewFile,BufRead * match ZenkakuSpace /　/
 " Auto-close quickfix when item in quickfix is selected.
 autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
+"setting for 'undo'
 if has('persistent_undo')
     let undo_path = expand('~/.vim/undo')
     exe 'set undodir=' . undo_path
@@ -95,6 +99,14 @@ if has('persistent_undo')
 endif
 set noswapfile
 set nobackup
+
+" always open newtab when opening new file
+function OpenFilesToTabs()
+    if len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) > 1
+      execute 'b # | tabnew | blast | bp'
+    endif
+endfunction
+autocmd BufNewFile,BufRead * :call OpenFilesToTabs()
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " include block

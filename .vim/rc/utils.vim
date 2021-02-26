@@ -24,4 +24,22 @@ endfunction
 command OpenFunctionList :call OpenFunctionList()
 noremap <C-W> <C-O>:call OpenFunctionList()<CR>
 
+" Config gor netrw
+noremap <silent> bb :Explore<CR>
+
+" 2: display such as executing 'ls -la'
+" 3: display tree view
+let g:netrw_liststyle = 3
+" 'v'でファイルを開くときは右側に開く。(デフォルトが左側なので入れ替え)
+let g:netrw_altv = 1
+" 'o'でファイルを開くときは下側に開く。(デフォルトが上側なので入れ替え)
+let g:netrw_alto = 1
+" ヘッダを非表示にする
+let g:netrw_banner=0
+" サイズを(K,M,G)で表示する
+let g:netrw_sizestyle="H"
+" 日付フォーマットを yyyy/mm/dd(曜日) hh:mm:ss で表示する
+let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
+" プレビューウィンドウを垂直分割で表示する
+let g:netrw_preview=1
 
