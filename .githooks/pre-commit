@@ -19,10 +19,12 @@ ERROR () {
     exit 1
 }
 
-if [[ "$USER_NAME" != "$GIT_USER_NAME" ]]; then
-    ERROR
-elif [[ "$USER_EMAIL" != "$GIT_USER_EMAIL" ]]; then
-    ERROR
+if [[ "$REMOTE_ORIGIN_URL" = "$GIT_URL" ]]; then
+    if [[ "$USER_NAME" != "$GIT_USER_NAME" ]]; then
+        ERROR
+    elif [[ "$USER_EMAIL" != "$GIT_USER_EMAIL" ]]; then
+        ERROR
+    fi
 fi
 
 exit 0
