@@ -88,6 +88,9 @@ nnoremap <silent> <S-T> :tabnext<CR>
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue ctermbg=238 guibg=#666666
 au BufNewFile,BufRead * match ZenkakuSpace /　/
 
+" コマンドラインウィンドウを開かないようにする
+nnoremap q: <Esc>
+
 " Auto-close quickfix when item in quickfix is selected.
 autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
