@@ -126,4 +126,7 @@ if filereadable(expand('~/.vim/rc/utils.vim'))
     source ~/.vim/rc/utils.vim
 endif
 
+if filereadable(expand('~/.vim/rc/popupmenu.vim'))
+    source ~/.vim/rc/popupmenu.vim
+endif
 
