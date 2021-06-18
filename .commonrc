@@ -30,7 +30,8 @@ check_dotfiles_update_using_github_api () {
     )
     if [ "$LATEST_SHA" != "$CURRENT_SHA" ];then
         echo "dotfiles is out of date." > /dev/stderr
-        echo "=> Please update dotfiles to run 'update_dotfiles' on shell" > /dev/stderr
+        # echo "=> Please update dotfiles to run 'update_dotfiles' on shell" > /dev/stderr
+        update_dotfiles
     fi
 }
 check_dotfiles_update_using_github_api
