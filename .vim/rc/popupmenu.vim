@@ -9,6 +9,8 @@ func! GetFunction()
         let pattern = '".* () {$" '
     elseif filetype == "python"
         let pattern = "^def"
+    elseif filetype == "vim"
+        let pattern = '"^ *func.*\!.*()"'
     endif
     let funclist = system('grep -e '.pattern." ".expand("%:p"))
     let splitted = split(funclist, "\n")
