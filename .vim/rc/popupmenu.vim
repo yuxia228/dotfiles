@@ -4,10 +4,10 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 func! GetFunction()
-    let ext = expand("%:e")
-    if ext == "sh"
+    let filetype = &filetype
+    if filetype == "sh"
         let pattern = '".* () {$" '
-    elseif ext == "py"
+    elseif filetype == "python"
         let pattern = "^def"
     endif
     let funclist = system('grep -e '.pattern." ".expand("%:p"))
