@@ -38,6 +38,7 @@ if v:version >= 802
         call popup_menu(list, #{callback: l:callback.func,})
     endfunction
     command! PopupMenuFunctionjump call Popupmenu_function_jump()
+    nnoremap <space>j :call Popupmenu_function_jump()<CR>
 
 endif
 
