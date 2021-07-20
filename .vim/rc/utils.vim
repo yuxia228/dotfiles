@@ -20,9 +20,17 @@ function! OpenFunctionList()
     setlocal nowrap
     silent! exec '%s;.*[a-zA-Z]|;' . basename . ' |;'
 endfunction
-
 command OpenFunctionList :call OpenFunctionList()
 noremap <C-W> <C-O>:call OpenFunctionList()<CR>
+
+" インデントの自動フォーマット
+func! Formatter()
+    let view = winsaveview()
+    normal gg=G
+    silent call winrestview(view)
+endfunc
+command Formatter :call Formatter()
+nnoremap <Space>f :call Formatter()<CR>
 
 " Config gor netrw
 noremap <silent> bb :Explore<CR>
