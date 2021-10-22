@@ -17,5 +17,10 @@ else
     color=red
 fi
 
-echo "(#[bg=$color]${CPU_LOAD}#[default])"
+COUNT=8
+BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
+BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
+_BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
+_BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
+echo "C[#[bg=$color]${BAR}#[default]${_BAR}]"
 

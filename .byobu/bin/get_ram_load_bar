@@ -1,0 +1,24 @@
+#!/bin/sh
+
+VAL=`free | grep Mem | awk '{printf "%d", ($3/$2)*100}'`
+LOAD_STR="RAM:${VAL}%"
+
+if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
+    color=blue
+elif [ "`echo "$VAL < 40" | bc`" -eq "1" ]; then
+    color=green
+elif [ "`echo "$VAL < 60" | bc`" -eq "1" ]; then
+    color=yellow
+elif [ "`echo "$VAL < 80" | bc`" -eq "1" ]; then
+    color="colour166"  # orange
+else
+    color=red
+fi
+
+COUNT=8
+BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
+BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
+_BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
+_BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
+echo "M[#[bg=$color]${BAR}#[default]${_BAR}]"
+

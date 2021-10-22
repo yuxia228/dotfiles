@@ -1,4 +1,22 @@
 #!/bin/sh
 
-df -h | grep -e '/$' | awk '{printf "%s/%s(%s)",$3,$2,$5}'
+# df -h | grep -e '/$' | awk '{printf "%s/%s(%s)",$3,$2,$5}'
+ROOT_DISK=`df -h | grep -e '/$'`
+
+VAL=`echo ${ROOT_DISK} | awk '{printf "%d", $5}'`
+STR=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3,$2}'`
+
+if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
+    color=blue
+elif [ "`echo "$VAL < 40" | bc`" -eq "1" ]; then
+    color=green
+elif [ "`echo "$VAL < 60" | bc`" -eq "1" ]; then
+    color=yellow
+elif [ "`echo "$VAL < 80" | bc`" -eq "1" ]; then
+    color="colour166"  # orange
+else
+    color=red
+fi
+
+echo "${STR}(#[bg=$color]${VAL}%#[default])"
 
