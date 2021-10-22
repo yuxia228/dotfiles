@@ -1,0 +1,4 @@
+#!/bin/sh
+
+free | grep Mem | awk '{printf "RAM:%d%", $3/$2*100}'
+

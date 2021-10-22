@@ -1,0 +1,4 @@
+#!/bin/sh
+
+df -h | grep -e '/$' | awk '{printf "%s/%s(%s)",$3,$2,$5}'
+
