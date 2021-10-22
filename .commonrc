@@ -15,7 +15,7 @@ update_dotfiles () {
 }
 
 check_dotfiles_update_using_github_api () {
-    bash -c "DISPLAY=; ping 1.1.1.1 -q -W 1 -c 1 > /dev/null"
+    bash -c "DISPLAY='' ping 1.1.1.1 -q -W 1 -c 1 > /dev/null"
     if [ $? -ne 0 ]; then
         return -1
     fi
