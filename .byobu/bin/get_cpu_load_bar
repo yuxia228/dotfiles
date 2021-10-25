@@ -1,6 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
-CPU_LOAD=`head -1 /proc/stat | awk '{printf "%d", ($2+$3+$4)/($2+$3+$4+$5)*100}'`
+SLEEP_SEC=1.0
+
+STAT=`head -1 /proc/stat`
+LOAD=`echo $STAT | awk '{printf "%d", ($2+$3+$4)}'`
+TOTAL=`echo $STAT | awk '{printf "%d", ($2+$3+$4+$5)}'`
+sleep $SLEEP_SEC
+STAT=`head -1 /proc/stat`
+LOAD=`echo $STAT | awk '{printf "%d", ($2+$3+$4)}' | xargs -i echo "{} - $LOAD" | bc`
+TOTAL=`echo $STAT | awk '{printf "%d", ($2+$3+$4+$5)}' | xargs -i echo "{} - $TOTAL" | bc`
+
+CPU_LOAD=`echo "100 * $LOAD / $TOTAL" | bc`
 CPU_LOAD_STR="CPU:${CPU_LOAD}%"
 
 VAL=${CPU_LOAD}
@@ -19,8 +29,14 @@ fi
 
 COUNT=8
 BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
-BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
 _BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
 _BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
-echo "C[#[bg=$color]${BAR}#[default]${_BAR}]"
+
+# bar is '|'
+#BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
+#echo "C[#[bg=$color]${BAR}#[default]${_BAR}]"
+
+# bar is block
+BAR=`for i in $(seq ${BAR_NUM}); do echo -ne "\u2588"; done`
+echo "C[#[fg=$color]${BAR}#[default]${_BAR}] $CPU_LOAD_STR"
 
