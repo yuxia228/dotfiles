@@ -38,5 +38,5 @@ _BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
 
 # bar is block
 BAR=`for i in $(seq ${BAR_NUM}); do echo -ne "\u2588"; done`
-echo "C[#[fg=$color]${BAR}#[default]${_BAR}] $CPU_LOAD_STR"
+echo "C[#[fg=$color]${BAR}#[default]${_BAR}]"
 
