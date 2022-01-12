@@ -71,3 +71,6 @@ if CommandChecker "tree" ; then
     alias tree="pwd ; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'"
 fi
 
+# useful functions
+function mygrep { grep -rnIi "$1" . --color; }
+
