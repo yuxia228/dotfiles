@@ -2,21 +2,37 @@
 # .zshrc
 #
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+#################################
+# include common config file
+#################################
 source ${HOME}/.commonrc
 
-# Path to your oh-my-zsh installation.
+#################################
+# oh-my-zsh install/include
+#################################
 export ZSH=$HOME/.oh-my-zsh
 if [ ! -d $ZSH ];then
     git clone https://github.com/ohmyzsh/ohmyzsh $ZSH
 fi
-
-plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 
+################################
+# oh-my-zsh plugins
+################################
+## Git ##
+plugins=(git)
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
+ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+## completions ##
+plugins=(... zsh-completions)
+autoload -U compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
+
+################################
+# Function
+################################
 git_prompt_tag () {
     TAG=`command git tag --points-at HEAD 2> /dev/null |cat` || return 0
     if [ -n "$TAG" ]; then
@@ -24,21 +40,16 @@ git_prompt_tag () {
     fi
 }
 
+###############################################
+# Prompt settings
+###############################################
 # instead of candy theme
-PROMPT=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) \
-%{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
-
 PROMPT=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag) \
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
-ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
 
+###############################################
+# Other settings
+###############################################
 alias ohmyzsh="mate ~/.oh-my-zsh"
-plugins=(... zsh-completions)
-autoload -U compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
