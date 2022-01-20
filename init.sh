@@ -60,3 +60,7 @@ git_config
 
 echo "=> dotfiles are installed."
 
+# default branch is main.
+cd ${SCRIPT_DIR}; git switch main
+
+
