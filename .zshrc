@@ -39,14 +39,23 @@ git_prompt_tag () {
         echo "%{$fg[red]%}[tag: ${TAG}]%{$fg[reset_color]%}"
     fi
 }
+set_zsh_prompt () {
+    if [ $# -eq 1 ]; then
+        PROMPT="${1}"
+    else
+        echo "ex.) $0 \$PROMPT_DEFAULT"
+    fi
+}
 
 ###############################################
 # Prompt settings
 ###############################################
 # instead of candy theme
-PROMPT=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag) \
+PROMPT_DEFAULT=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)\
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
-
+PROMPT_SIMPLE=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}[%*] %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)\
+%{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
+set_zsh_prompt $PROMPT_SIMPLE
 
 ###############################################
 # Other settings
