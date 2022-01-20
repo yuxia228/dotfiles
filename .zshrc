@@ -7,39 +7,6 @@
 #################################
 source ${HOME}/.commonrc
 
-#################################
-# oh-my-zsh install
-#################################
-export ZSH=${HOME}/.oh-my-zsh
-export ZSH_CUSTOM=${ZSH}/custom
-if [ ! -d ${ZSH} ];then
-    git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh $ZSH
-fi
-# include activate oh-my-zsh
-source ${ZSH}/oh-my-zsh.sh
-
-################################
-# oh-my-zsh plugins settings
-################################
-## Git ##
-plugins=(git)
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
-ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
-## zsh-completions ##
-if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]; then
-    git clone --depth 1 https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM}/plugins/zsh-completions
-fi
-plugins+=(zsh-completions)
-autoload -U compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
-## zsh-syntax-highlighting ##
-if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]; then
-    git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
-fi
-plugins+=(zsh-syntax-highlighting)
-
 ################################
 # Function
 ################################
@@ -48,6 +15,13 @@ git_prompt_tag () {
     if [ -n "${TAG}" ]; then
         echo "%{$fg[red]%}[tag: ${TAG}]%{$fg[reset_color]%}"
     fi
+}
+git_prompt_info () {
+    BRANCH=`command git branch | grep '*' | awk '{print $2}'`
+    if [ $(git status --short | wc -l) -ne 0 ]; then
+        UPDATE="%{$fg[red]%} *"
+    fi
+    echo "%{$fg[green]%}[${BRANCH}${UPDATE}%{$fg[green]%}]%{$fg[reset_color]%}"
 }
 set_zsh_prompt () {
     if [ $# -eq 1 ]; then
@@ -60,15 +34,33 @@ set_zsh_prompt () {
 ###############################################
 # Prompt settings
 ###############################################
-# instead of candy theme
-PROMPT_DEFAULT=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)\
+## autoload ##
+autoload -Uz colors; colors
+autoload -Uz compinit: compinit
+## zstyle
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
+zstyle ':completion:*' list-colors "${LS_COLORS}"
+## setopt ##
+setopt prompt_subst
+## PROMPT ##
+PROMPT_DEFAULT=$'
+%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
-PROMPT_SIMPLE=$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}[%*] %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)\
-%{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
+PROMPT_SIMPLE=$'
+%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_info) $(git_prompt_tag)
+%{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
 set_zsh_prompt ${PROMPT_SIMPLE}
 
 ###############################################
 # Other settings
 ###############################################
-alias ohmyzsh="mate ~/.oh-my-zsh"
+## history settings ##
+HISTFILE=${HOME}/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt append_history
+setopt share_history
+setopt hist_ignore_all_dups
+
 
