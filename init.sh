@@ -61,6 +61,9 @@ git_config
 echo "=> dotfiles are installed."
 
 # default branch is main.
-cd ${SCRIPT_DIR}; git switch main
-
+if [[ "$(git --help | grep switch)" == "" ]]; then
+    cd ${SCRIPT_DIR}; git checkout main
+else
+    cd ${SCRIPT_DIR}; git switch main
+fi
 
