@@ -8,12 +8,14 @@
 source ${HOME}/.commonrc
 
 #################################
-# oh-my-zsh install/include
+# oh-my-zsh install
 #################################
 export ZSH=${HOME}/.oh-my-zsh
-if [ ! -d $ZSH ];then
-    git clone https://github.com/ohmyzsh/ohmyzsh $ZSH
+export ZSH_CUSTOM=${ZSH}/custom
+if [ ! -d ${ZSH} ];then
+    git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh $ZSH
 fi
+# include activate oh-my-zsh
 source ${ZSH}/oh-my-zsh.sh
 
 ################################
@@ -25,10 +27,18 @@ ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
-## completions ##
-plugins=(... zsh-completions)
+## zsh-completions ##
+if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-completions ]; then
+    git clone --depth 1 https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM}/plugins/zsh-completions
+fi
+plugins+=(zsh-completions)
 autoload -U compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
+## zsh-syntax-highlighting ##
+if [ ! -d ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting ]; then
+    git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+fi
+plugins+=(zsh-syntax-highlighting)
 
 ################################
 # Function
