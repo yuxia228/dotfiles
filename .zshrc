@@ -42,7 +42,10 @@ git_prompt_tag () {
     fi
 }
 git_prompt_info () {
-    BRANCH=`command git branch | grep '*' | awk '{print $2}'`
+    BRANCH=`git branch | grep '*' | awk '{print $2}'`
+    if [[ "`echo ${BRANCH} | grep '('`" != "" ]]; then
+        BRANCH=$(git log --oneline | head -1 | awk '{print $1}')
+    fi
     if [ $(git status --short | wc -l) -ne 0 ]; then
         UPDATE="%{$fg[red]%} *"
     fi
