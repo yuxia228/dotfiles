@@ -44,16 +44,21 @@ git_prompt_tag () {
         echo "%{$fg[red]%}[tag: ${TAG}]%{$fg[reset_color]%}"
     fi
 }
-git_prompt_info () {
-    BRANCH=`git branch | grep '*' | awk '{print $2}'`
-    if [[ "`echo ${BRANCH} | grep '('`" != "" ]]; then
-        BRANCH=$(git log --oneline | head -1 | awk '{print $1}')
+git_prompt_status() {
+    GIT_STATUS=$(git status 2>/dev/null)
+    if [[ "${GIT_STATUS}" != "" ]];then
+        STATUS="%{$fg[green]%}["
+        BRANCH=$(echo -e "$GIT_STATUS"| head -1 | awk '{print $NF}')
+        STATUS+=${BRANCH}
+        UPDATE=$(echo -e "$GIT_STATUS"| grep 'nothing to commit')
+        if [[ "${UPDATE}" == "" ]];then
+            STATUS+="%{$fg[red]%} *"
+        fi
+        STATUS+="%{$fg[green]%}]%{$fg[reset_color]%} "
+        echo "$STATUS"
     fi
-    if [ $(git status --short | wc -l) -ne 0 ]; then
-        UPDATE="%{$fg[red]%} *"
-    fi
-    echo "%{$fg[green]%}[${BRANCH}${UPDATE}%{$fg[green]%}]%{$fg[reset_color]%}"
 }
+
 set_zsh_prompt () {
     if [ $# -eq 1 ]; then
         PROMPT="${1}"
@@ -76,10 +81,10 @@ zstyle ':completion:*' list-colors "${LS_COLORS}"
 setopt prompt_subst
 ## PROMPT ##
 PROMPT_DEFAULT=\
-$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)
+$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_status) $(git_prompt_tag)
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
 PROMPT_SIMPLE=\
-$'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_info) $(git_prompt_tag)
+$'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_status) $(git_prompt_tag)
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
 set_zsh_prompt ${PROMPT_SIMPLE}
 
