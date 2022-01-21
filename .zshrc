@@ -7,6 +7,30 @@
 #################################
 source ${HOME}/.commonrc
 
+#################################
+# zinit
+#################################
+ZINIT_HOME="${HOME}/.zinit"
+if [[ ! -d ${ZINIT_HOME} ]]; then
+    git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+###########
+# plugin
+###########
+zinit load zsh-users/zsh-completions
+zinit load zsh-users/zsh-syntax-highlighting
+{
+    zinit load zsh-users/zsh-history-substring-search
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey "$terminfo[kcuu1]" history-substring-search-up
+    bindkey "$terminfo[kcud1]" history-substring-search-down
+}
+
 ################################
 # Function
 ################################
