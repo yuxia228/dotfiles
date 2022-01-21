@@ -69,11 +69,11 @@ zstyle ':completion:*' list-colors "${LS_COLORS}"
 ## setopt ##
 setopt prompt_subst
 ## PROMPT ##
-PROMPT_DEFAULT=$'
-%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)
+PROMPT_DEFAULT=\
+$'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_info) $(git_prompt_tag)
 %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
-PROMPT_SIMPLE=$'
-%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_info) $(git_prompt_tag)
+PROMPT_SIMPLE=\
+$'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_info) $(git_prompt_tag)
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
 set_zsh_prompt ${PROMPT_SIMPLE}
 
