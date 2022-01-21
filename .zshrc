@@ -22,7 +22,8 @@ autoload -Uz _zinit
 # plugin
 ###########
 zinit load zsh-users/zsh-completions
-zinit load zsh-users/zsh-syntax-highlighting
+zinit load zsh-users/zsh-autosuggestions
+zinit load zdharma-continuum/fast-syntax-highlighting
 {
     zinit load zsh-users/zsh-history-substring-search
     bindkey '^[[A' history-substring-search-up
