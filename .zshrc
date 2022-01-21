@@ -31,7 +31,10 @@ zinit load zdharma-continuum/fast-syntax-highlighting
     bindkey "$terminfo[kcuu1]" history-substring-search-up
     bindkey "$terminfo[kcud1]" history-substring-search-down
 }
-
+{
+    export NVM_LAZY_LOAD=true
+    zinit load lukechilds/zsh-nvm
+}
 ################################
 # Function
 ################################
