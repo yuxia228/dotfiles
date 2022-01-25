@@ -1,6 +1,13 @@
 #
 # .zshrc
 #
+#################################
+# zprof
+#################################
+if [[ "${ZPROF}" == "True" ]]; then
+    zmodload zsh/zprof && zprof
+    unset ZPROF
+fi
 
 #################################
 # include common config file
@@ -99,4 +106,10 @@ setopt append_history
 setopt share_history
 setopt hist_ignore_all_dups
 
+#################################
+# zprof
+#################################
+if (which zprof > /dev/null 2>&1) ;then
+    zprof
+fi
 
