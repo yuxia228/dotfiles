@@ -1,11 +1,11 @@
 export LESS='-R'
 export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
 
-if [[ `which nvim` != "" ]]; then
+if [[ `/bin/which nvim` != "" ]]; then
     EDITOR=nvim
-elif [[ `which vim` != "" ]]; then
+elif [[ `/bin/which vim` != "" ]]; then
     EDITOR=vim
-elif [[ `which nano` != "" ]]; then
+elif [[ `/bin/which nano` != "" ]]; then
     EDITOR=nano
 fi
 
