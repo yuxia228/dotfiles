@@ -48,6 +48,9 @@ fi
 
 source ${HOME}/.aliases
 source ${HOME}/.variables
+if [ -e ${HOME}/.env ];then
+    source ${HOME}/.env
+fi
 
 # Common Process
 set_term () {
