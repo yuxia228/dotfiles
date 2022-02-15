@@ -1,10 +1,14 @@
 #!/bin/sh
 
 # df -h | grep -e '/$' | awk '{printf "%s/%s(%s)",$3,$2,$5}'
-ROOT_DISK=`df -h | grep -e '/$'`
+ROOT_DISK=`df | grep -e '/$'`
 
 VAL=`echo ${ROOT_DISK} | awk '{printf "%d", $5}'`
-STR=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3,$2}'`
+STR_TB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024/1024/1024,$2/1024/1024/1024}'`
+STR_GB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024/1024,$2/1024/1024}'`
+STR_MB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024,$2/1024}'`
+STR_KB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3,$2}'`
+STR=${STR_GB}
 
 if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
     color=blue
