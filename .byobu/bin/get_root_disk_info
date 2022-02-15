@@ -4,10 +4,10 @@
 ROOT_DISK=`df | grep -e '/$'`
 
 VAL=`echo ${ROOT_DISK} | awk '{printf "%d", $5}'`
-STR_TB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024/1024/1024,$2/1024/1024/1024}'`
-STR_GB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024/1024,$2/1024/1024}'`
-STR_MB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3/1024,$2/1024}'`
-STR_KB=`echo ${ROOT_DISK} | awk '{printf "%s/%s",$3,$2}'`
+STR_TB=`echo ${ROOT_DISK} | awk '{printf "%.0f/%.0f_TB",$3/1024/1024/1024,$2/1024/1024/1024}'`
+STR_GB=`echo ${ROOT_DISK} | awk '{printf "%.0f/%.0f_GB",$3/1024/1024,$2/1024/1024}'`
+STR_MB=`echo ${ROOT_DISK} | awk '{printf "%.0f/%.0f_MB",$3/1024,$2/1024}'`
+STR_KB=`echo ${ROOT_DISK} | awk '{printf "%.0f/%.0f_KB",$3,$2}'`
 STR=${STR_GB}
 
 if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
