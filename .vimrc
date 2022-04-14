@@ -130,3 +130,7 @@ if filereadable(expand('~/.vim/rc/popupmenu.vim'))
     source ~/.vim/rc/popupmenu.vim
 endif
 
+if filereadable(expand('~/.vim/rc/formatter.vim'))
+    source ~/.vim/rc/formatter.vim
+endif
+

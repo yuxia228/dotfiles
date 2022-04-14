@@ -23,15 +23,6 @@ endfunction
 command OpenFunctionList :call OpenFunctionList()
 noremap <C-W> <C-O>:call OpenFunctionList()<CR>
 
-" インデントの自動フォーマット
-func! Formatter()
-    let view = winsaveview()
-    normal gg=G
-    silent call winrestview(view)
-endfunc
-command Formatter :call Formatter()
-nnoremap <Space>f :call Formatter()<CR>
-
 " Config gor netrw
 noremap <silent> bb :Explore<CR>
 
@@ -50,4 +41,6 @@ let g:netrw_sizestyle="H"
 let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
 " プレビューウィンドウを垂直分割で表示する
 let g:netrw_preview=1
+
+
 
