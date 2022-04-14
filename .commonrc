@@ -49,6 +49,11 @@ fi
 if [ -e $HOME/.cargo/env ]; then
     source $HOME/.cargo/env
 fi
+# Golang
+if [ "`/bin/which go`" != "" ]; then
+    export GOPATH=$HOME/go
+    export PATH=$PATH:$GOPATH/bin
+fi
 
 source ${HOME}/.aliases
 source ${HOME}/.variables
