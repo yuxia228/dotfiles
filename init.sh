@@ -3,7 +3,7 @@
 DRYRUN=""
 SCRIPT_DIR=$(cd `dirname $0`; pwd)
 cd ${SCRIPT_DIR}
-
+LN_DIR_OPT=${LN_DIR_OPT:-"-sfd"}
 
 Usage () {
     echo "Usage:"
@@ -46,14 +46,14 @@ for i in $DOTDIRS; do
     if [[ "$i" == ".git/" ]] || [[ "$i" == ".config/" ]]; then
         continue;
     fi
-    ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/
+    ${DRYRUN} ln ${LN_DIR_OPT} ${SCRIPT_DIR}/$i ${HOME}/
 done
 
 if [[ "$DRYRUN" != "" ]]; then echo dotconfigs:; fi
 DOTCONFIGS="$( ls -dF .config/[^.]* | grep /)"
 mkdir -p ${HOME}/.config
 for i in $DOTCONFIGS; do
-    ${DRYRUN} ln -sfd ${SCRIPT_DIR}/$i ${HOME}/.config/
+    ${DRYRUN} ln ${LN_DIR_OPT} ${SCRIPT_DIR}/$i ${HOME}/.config/
 done
 
 git_config
