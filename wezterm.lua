@@ -1,4 +1,5 @@
 local wezterm = require 'wezterm';
+
 return {
     default_prog = {
         "wsl.exe", "~",
@@ -23,5 +24,10 @@ return {
             label = "Powershell",
             args = {"powershell.exe"}
         },
+        {
+            label = "Cygwin",
+            args = {"C:/cygwin64/bin/bash.exe"}
+        },
     },
 }
+
