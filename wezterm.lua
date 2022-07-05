@@ -25,8 +25,8 @@ return {
             args = {"powershell.exe"}
         },
         {
-            label = "Cygwin",
-            args = {"C:/cygwin64/bin/bash.exe"}
+            label = "Cygwin(chere is required)",
+            args = {"C:/cygwin64/bin/bash.exe", "/bin/xhere", "/bin/bash", "~"}
         },
     },
 }
