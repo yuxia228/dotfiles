@@ -74,5 +74,5 @@ fi
 # useful functions
 function mygrep { grep -rnIi "$1" . --color; }
 
-function slowcat { scriptreplay -t <(yes 0.1 1) <(cat <(echo '') "$1") 2> /dev/null }
+function slowcat { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /dev/null }
 
