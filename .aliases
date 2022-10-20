@@ -74,5 +74,7 @@ fi
 # useful functions
 function mygrep { grep -rnIi "$1" . --color; }
 
-function slowcat { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /dev/null }
+function slowcat_old { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /dev/null ; }
+function slowcat { bash -c 'while IFS= read -rN1 c; do printf "$c";sleep 0.01;done' < "$1" ; }
+
 
