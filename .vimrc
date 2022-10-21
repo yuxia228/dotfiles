@@ -134,3 +134,7 @@ if filereadable(expand('~/.vim/rc/formatter.vim'))
     source ~/.vim/rc/formatter.vim
 endif
 
+if filereadable(expand('~/.vim/rc/mysyntax.vim'))
+    source ~/.vim/rc/mysyntax.vim
+endif
+
