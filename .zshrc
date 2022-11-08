@@ -2,6 +2,11 @@
 # .zshrc
 #
 #################################
+# misc config
+#################################
+LOW_SPEC_DEVICES="raspberrypizero|kobo"
+
+#################################
 # zprof
 #################################
 if [[ "${ZPROF}" == "True" ]]; then
@@ -30,18 +35,22 @@ autoload -Uz _zinit
 ###########
 zinit load zsh-users/zsh-completions
 zinit load zsh-users/zsh-autosuggestions
-zinit load zdharma-continuum/fast-syntax-highlighting
-{
-    zinit load zsh-users/zsh-history-substring-search
-    bindkey '^[[A' history-substring-search-up
-    bindkey '^[[B' history-substring-search-down
-    bindkey "$terminfo[kcuu1]" history-substring-search-up
-    bindkey "$terminfo[kcud1]" history-substring-search-down
-}
-{
-    export NVM_LAZY_LOAD=true
-    zinit load lukechilds/zsh-nvm
-}
+zinit load zsh-users/zsh-syntax-highlighting
+# avoid heavy plugins for low-spec devices
+if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
+    zinit load zdharma-continuum/fast-syntax-highlighting
+    {
+        zinit load zsh-users/zsh-history-substring-search
+        bindkey '^[[A' history-substring-search-up
+        bindkey '^[[B' history-substring-search-down
+        bindkey "$terminfo[kcuu1]" history-substring-search-up
+        bindkey "$terminfo[kcud1]" history-substring-search-down
+    }
+    {
+        export NVM_LAZY_LOAD=true
+        zinit load lukechilds/zsh-nvm
+    }
+fi
 ################################
 # Function
 ################################
@@ -93,7 +102,15 @@ $'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[
 PROMPT_SIMPLE=\
 $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_status) $(git_prompt_tag)
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
-set_zsh_prompt ${PROMPT_SIMPLE}
+PROMPT_SIMPLE_NO_GIT=\
+$'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%}
+%{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
+# avoid heavy prompt for low-spec devices
+if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
+    set_zsh_prompt ${PROMPT_SIMPLE_NO_GIT}
+else
+    set_zsh_prompt ${PROMPT_SIMPLE}
+fi
 
 ###############################################
 # Other settings
