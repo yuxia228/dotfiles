@@ -1,3 +1,5 @@
 /.vim/undo/*
 .vim/.netrwhist
+.vim/autoload
+.vim/plugged
 
