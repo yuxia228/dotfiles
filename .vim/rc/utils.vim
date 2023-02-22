@@ -12,6 +12,11 @@ noremap <Plug>(ToggleColorColumn)
 " ノーマルモードの 'cc' に割り当てる
 nmap cc <Plug>(ToggleColorColumn)
 
+" 行数の表示切替
+command! ToggleLineNumber setl number! number?
+" ノーマルモードの 'nn' に割り当てる
+nmap nn :<C-u>ToggleLineNumber<CR>
+
 function! OpenFunctionList()
     let basename = expand("%:t") " :h=> path, :t=>filename
     vimgrep def %
