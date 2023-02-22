@@ -124,6 +124,22 @@ setopt share_history
 setopt hist_ignore_all_dups
 
 #################################
+# Other config
+#################################
+# pyenv
+PYENV_ROOT="$HOME/.local_pyenv"
+if [ ! -e ${PYENV_ROOT} ]; then
+    git clone https://github.com/yyuu/pyenv.git ${PYENV_ROOT}
+    git clone https://github.com/yyuu/pyenv-virtualenv.git ${PYENV_ROOT}/plugins/pyenv-virtualenv
+fi
+if [ -e ${PYENV_ROOT} ]; then
+    export PYENV_ROOT="$HOME/.local_pyenv"
+    export PATH="${PYENV_ROOT}/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+#################################
 # zprof
 #################################
 if (which zprof > /dev/null 2>&1) ;then
