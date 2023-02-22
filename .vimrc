@@ -154,5 +154,9 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 
 call plug#begin()
 " Write plugin load settings
+Plug 'lambdalisue/fern.vim'
+if filereadable(expand('~/.vim/plugins/fern_config.vim'))
+    source ~/.vim/plugins/fern_config.vim
+endif
 call plug#end()
 
