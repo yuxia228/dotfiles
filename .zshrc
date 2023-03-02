@@ -107,9 +107,9 @@ $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
 # avoid heavy prompt for low-spec devices
 if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
-    set_zsh_prompt ${PROMPT_SIMPLE_NO_GIT}
-else
     set_zsh_prompt ${PROMPT_SIMPLE}
+else
+    set_zsh_prompt ${PROMPT_SIMPLE_NO_GIT}
 fi
 
 ###############################################
