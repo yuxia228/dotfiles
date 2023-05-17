@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VAL=`free | grep Mem | awk '{printf "%d", ($3/$2)*100}'`
+VAL=`free | grep Mem | awk '{printf "%d", ($2-$7)/$2*100}'` # (total-avail)/total*100
 LOAD_STR="RAM:${VAL}%"
 
 if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
