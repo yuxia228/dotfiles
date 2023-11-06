@@ -65,7 +65,8 @@ alias ..='cd ../'
 alias git_latest_tag='git describe --abbrev=0 --tags'
 alias dd='dd status=progress'
 alias sshh="ssh -o 'StrictHostKeyChecking no'"
-alias tmux="tmux -u a || tmux -u"
+alias maintmux="tmux -u a -t main || tmux -u new -s main"
+alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
 
 if CommandChecker "tree" ; then
     alias tree="pwd ; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'"
