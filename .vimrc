@@ -22,6 +22,7 @@ set tabstop=8          "画面上でタブ文字が占める幅"
 set softtabstop=4      "連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅"
 set shiftwidth=4       "自動インデントでずれる幅"
 set expandtab          "タブ入力を複数の空白入力に置き換える"
+set viminfo='20,\"1000
 filetype plugin indent on
 syntax on
 
