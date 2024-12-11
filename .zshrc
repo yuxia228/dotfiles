@@ -88,7 +88,7 @@ set_zsh_prompt () {
 ###############################################
 ## autoload ##
 autoload -Uz colors; colors
-autoload -Uz compinit: compinit
+autoload -Uz compinit; compinit
 ## zstyle
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
