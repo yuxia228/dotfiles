@@ -86,6 +86,19 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
+# SSH Agent
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent -s > "${HOME}/.ssh/agent-env"
+fi
+if [[ -f "${HOME}/.ssh/agent-env" ]]; then
+    . "${HOME}/.ssh/agent-env" > /dev/null
+    if ! kill -0 $SSH_AGENT_PID > /dev/null 2>&1; then
+        ssh-agent -s > "${HOME}/.ssh/agent-env"
+    fi
+fi
+. "${HOME}/.ssh/agent-env" > /dev/null
+ssh-add -l > /dev/null || ssh-add
+
 # Functions
 csv_viewer () {
     column -s, -t < $1 | less -#2 -N -S
