@@ -139,3 +139,7 @@ if filereadable(expand('~/.vim/rc/mysyntax.vim'))
     source ~/.vim/rc/mysyntax.vim
 endif
 
+if filereadable(expand('~/.vim/rc/openscad.vim'))
+    source ~/.vim/rc/openscad.vim
+endif
+
