@@ -105,12 +105,25 @@ $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]
 PROMPT_SIMPLE_NO_GIT=\
 $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%}
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
+PROMPT_DEFAULT_HIDE_USERNAME=\
+$'%{${fg_bold[green]}%}user@ubuntu %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%}
+%{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
+PROMPT_DEFAULT_HIDE_HOSTNAME=\
+$'%{${fg_bold[green]}%}%n@ubuntu %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%}
+%{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
 # avoid heavy prompt for low-spec devices
 if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
     set_zsh_prompt ${PROMPT_SIMPLE}
 else
     set_zsh_prompt ${PROMPT_SIMPLE_NO_GIT}
 fi
+
+demo_console () {
+    set_zsh_prompt ${PROMPT_DEFAULT_HIDE_USERNAME}
+}
+demo_console_hide_hostname () {
+    set_zsh_prompt ${PROMPT_DEFAULT_HIDE_HOSTNAME}
+}
 
 ###############################################
 # Other settings
