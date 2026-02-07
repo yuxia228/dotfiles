@@ -88,7 +88,7 @@ set_zsh_prompt () {
 ###############################################
 ## autoload ##
 autoload -Uz colors; colors
-autoload -Uz compinit; compinit
+autoload -Uz compinit && compinit -C
 ## zstyle
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # ignore lower/upper char in serarch
@@ -161,10 +161,10 @@ if [ ! -e ${RBENV_ROOT} ]; then
 fi
 if [ -e ${RBENV_ROOT} ]; then
     export PATH="${RBENV_ROOT}/bin:$PATH"
-    autoload -Uz compinit && compinit
     autoload -U +X bashcompinit && bashcompinit
     eval "$(rbenv init - bash)"
 fi
+
 
 #################################
 # zprof
