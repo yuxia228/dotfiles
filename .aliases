@@ -3,7 +3,7 @@
 #
 
 CommandChecker () {
-    COMMAND=$1
+    COMMAND=$(which $1 2>&1)
     if [ -x $COMMAND ]; then
         return 0
     else
