@@ -95,9 +95,9 @@ if [[ -f "${HOME}/.ssh/agent-env" ]]; then
     if ! kill -0 $SSH_AGENT_PID > /dev/null 2>&1; then
         ssh-agent -s > "${HOME}/.ssh/agent-env"
     fi
+    . "${HOME}/.ssh/agent-env" > /dev/null
+    ssh-add -l > /dev/null || ssh-add
 fi
-. "${HOME}/.ssh/agent-env" > /dev/null
-ssh-add -l > /dev/null || ssh-add
 
 # Functions
 csv_viewer () {
