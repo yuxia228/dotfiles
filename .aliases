@@ -33,25 +33,6 @@ elif [ -x "/home/linuxbrew/.linuxbrew/bin/$COMMAND" ]; then
     alias $COMMAND="/home/linuxbrew/.linuxbrew/bin/$COMMAND"
 fi
 
-if CommandChecker "peco" ; then
-    if [[ "$SHELL_ZSH" == "true" ]]; then
-        bindkey '^r' cool-peco-history # ctrl+r
-        bindkey '^h' cool-peco-ssh
-        bindkey '^p' cool-peco-ps
-    fi
-
-    alias ff=cool-peco-filename-search
-    alias gbb=cool-peco-git-checkout
-    alias gll=cool-peco-git-log
-    alias ta=cool-peco-tmux-session
-    alias cg=cool-peco-ghq
-    alias cdd=peco-cd
-
-    if CommandChecker "ghq" ; then
-        alias g='cd $(ghq root)/$(ghq list | peco)'
-    fi
-fi
-
 # personal setting
 alias l='ls --color=auto'
 alias ls='ls --color=auto'
