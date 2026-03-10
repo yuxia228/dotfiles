@@ -54,13 +54,12 @@ if [ -e $HOME/.cargo/env ]; then
     source $HOME/.cargo/env
 fi
 # Golang
-if [ "`/bin/which go`" != "" ]; then
+if [ -e $HOME/go/bin ]; then
     export GOPATH=$HOME/go
     export PATH=$PATH:$GOPATH/bin
 fi
 
 source ${HOME}/.aliases
-source ${HOME}/.variables
 if [ -e ${HOME}/.env ];then
     source ${HOME}/.env
 fi
@@ -108,4 +107,8 @@ csv_viewer () {
 fedora-grub-update () {
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 }
+
+export LESS='-R'
+export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
+
 

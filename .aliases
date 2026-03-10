@@ -24,7 +24,9 @@ fi
 
 if CommandChecker "nvim" ; then
     alias vim='nvim'
-    alias vimdiff='nvim -d '
+    EDITOR=nvim
+else
+    EDITOR=vim
 fi
 
 if CommandChecker "tig" ; then
