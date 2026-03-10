@@ -64,27 +64,6 @@ if [ -e ${HOME}/.env ];then
     source ${HOME}/.env
 fi
 
-# Common Process
-set_term () {
-    _terms=(xterm-256color xterm-16color xterm)
-    for t in "${_terms[@]}";do
-        if infocmp >&/dev/null;then
-            break
-        else
-            export TERM=$t
-        fi
-    done
-}
-
-if [ "$TERM" = "alacritty" ]; then
-    TERM=xterm-256color
-    set_term
-fi
-
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
 # SSH Agent
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent -s > "${HOME}/.ssh/agent-env"
