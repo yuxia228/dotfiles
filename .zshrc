@@ -136,6 +136,10 @@ setopt append_history
 setopt share_history
 setopt hist_ignore_all_dups
 
+## Setup Home/End key
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
+
 #################################
 # Other config
 #################################
