@@ -16,5 +16,5 @@ else
     color=red
 fi
 
-echo "(#[bg=$color]$load_ave#[default])"
+echo "#[bg=$color]$load_ave#[default]"
 
