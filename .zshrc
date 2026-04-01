@@ -151,7 +151,7 @@ if [ ! -e ${PYENV_ROOT} ]; then
 fi
 if [ -e ${PYENV_ROOT} ]; then
     export PYENV_ROOT="$HOME/.local_pyenv"
-    export PATH="${PYENV_ROOT}/bin:$PATH"
+    append_path ${PYENV_ROOT}/bin
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
@@ -164,7 +164,7 @@ if [ ! -e ${RBENV_ROOT} ]; then
     git clone --depth 1 https://github.com/rbenv/ruby-build.git ${RBENV_ROOT}/plugins/ruby-build
 fi
 if [ -e ${RBENV_ROOT} ]; then
-    export PATH="${RBENV_ROOT}/bin:$PATH"
+    append_path ${RBENV_ROOT}/bin
     autoload -U +X bashcompinit && bashcompinit
     eval "$(rbenv init - bash)"
 fi
