@@ -21,14 +21,14 @@ fi
 if CommandChecker "colordiff" ; then
     alias diff='colordiff -up'
 else
-    unalias diff
+    unalias diff >/dev/null 2>&1
 fi
 
 if CommandChecker "nvim" ; then
     alias vim='nvim'
     EDITOR=nvim
 else
-    unalias vim
+    unalias vim >/dev/null 2>&1
     EDITOR=vim
 fi
 
