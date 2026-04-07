@@ -21,14 +21,18 @@ fi
 if CommandChecker "colordiff" ; then
     alias diff='colordiff -up'
 else
-    unalias diff >/dev/null 2>&1
+    if [[ "$(alias -m diff)" != "" ]]; then 
+        unalias diff >/dev/null 2>&1
+    fi
 fi
 
 if CommandChecker "nvim" ; then
     alias vim='nvim'
     EDITOR=nvim
 else
-    unalias vim >/dev/null 2>&1
+    if [[ "$(alias -m vim)" != "" ]]; then 
+        unalias vim >/dev/null 2>&1
+    fi
     EDITOR=vim
 fi
 
@@ -57,7 +61,9 @@ alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
 if CommandChecker "tree" ; then
     alias tree="pwd ; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'"
 else
-    unalias tree
+    if [[ "$(alias -m tree)" != "" ]]; then 
+        unalias tree
+    fi
 fi
 
 # useful functions
