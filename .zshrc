@@ -102,6 +102,9 @@ $'%{$fg_bold[green]%}%n@%m %{$fg[blue]%}%D{[%X]} %{$reset_color%}%{$fg[white]%}[
 PROMPT_SIMPLE=\
 $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_status) $(git_prompt_tag)
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
+PROMPT_SIMPLE_CAT=\
+$'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%} $(git_prompt_status) $(git_prompt_tag)
+%{${fg[white]}%}ᓚᘏᗢ %{${fg_bold[blue]}%}<%{${reset_color}%} '
 PROMPT_SIMPLE_NO_GIT=\
 $'%{${fg_bold[green]}%}%n@%m %{${fg[blue]}%}[%*] %{${reset_color}%}%{${fg[white]}%}[%~]%{${reset_color}%}
 %{${fg[blue]}%}->%{${fg_bold[blue]}%} %#%{${reset_color}%} '
@@ -118,6 +121,9 @@ else
     set_zsh_prompt ${PROMPT_SIMPLE_NO_GIT}
 fi
 
+cat_console() {
+    set_zsh_prompt ${PROMPT_SIMPLE_CAT}
+}
 demo_console () {
     set_zsh_prompt ${PROMPT_DEFAULT_HIDE_USERNAME}
 }
