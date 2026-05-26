@@ -2,46 +2,6 @@
 # alias collection
 #
 
-CommandChecker () {
-    COMMAND=$(which $1 2>&1)
-    if [ -x $COMMAND ]; then
-        return 0
-    else
-        return -1
-    fi
-}
-
-# ZSHの判定
-SHELL_ZSH="false"
-p=`ps --pid $$ -o command |tail -1`
-if [ "`echo "$p" | grep 'zsh'`" != "" ] ; then
-    SHELL_ZSH="true"
-fi
-
-if CommandChecker "colordiff" ; then
-    alias diff='colordiff -up'
-else
-    if [[ "$(alias -m diff)" != "" ]]; then 
-        unalias diff >/dev/null 2>&1
-    fi
-fi
-
-if CommandChecker "nvim" ; then
-    alias vim='nvim'
-    EDITOR=nvim
-else
-    if [[ "$(alias -m vim)" != "" ]]; then 
-        unalias vim >/dev/null 2>&1
-    fi
-    EDITOR=vim
-fi
-
-if CommandChecker "tig" ; then
-    :
-elif [ -x "/home/linuxbrew/.linuxbrew/bin/$COMMAND" ]; then
-    alias $COMMAND="/home/linuxbrew/.linuxbrew/bin/$COMMAND"
-fi
-
 # personal setting
 alias l='ls --color=auto'
 alias ls='ls --color=auto'
@@ -58,18 +18,8 @@ alias sshh="ssh -o 'StrictHostKeyChecking no'"
 alias maintmux="tmux -u a -t main || tmux -u new -s main"
 alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
 
-if CommandChecker "tree" ; then
-    alias tree="pwd ; find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'"
-else
-    if [[ "$(alias -m tree)" != "" ]]; then 
-        unalias tree
-    fi
-fi
-
 # useful functions
 function mygrep { grep -rnIi "$1" . --color; }
-
 function slowcat_old { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /dev/null ; }
 function slowcat { bash -c 'while IFS= read -rN1 c; do printf "$c";sleep 0.01;done' < "$1" ; }
-
 
