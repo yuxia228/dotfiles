@@ -49,6 +49,7 @@ set clipboard^=unnamedplus
 set ambiwidth=double                    " 2バイト文字でカーソル位置がずれる問題の対策 "
 inoremap <silent> jj <ESC>:<C-u>w<CR>   " save file at returning normal mode "
 noremap <silent><C-H><C-H> :<C-u>set nohlsearch!<CR>
+nnoremap <ESC><ESC> :nohl<CR>
 
 " 検索に関する設定
 set incsearch                               " 一致したもの全てハイライトする
