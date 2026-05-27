@@ -14,7 +14,6 @@ set list               "スペースの可視化"
 set listchars=tab:»\ ,trail:-,extends:»,precedes:«,nbsp:% "space 対応"
 set ruler              "カーソルが何行目の何列目に置かれているかを表示"
 set whichwrap=b,s,h,l,<,>,[,],~ " カーソルの左右移動で行末から次の行の行頭への移動が可能になる
-set backspace=indent,eol,start " バックスペースキーの有効化
 set autoread           "内容が変更されたら自動的に再読み込み
 set autoindent         "改行時に前の行のインデントを継続する"
 set smartindent        "改行時に入力された行の末尾に合わせて次の行のインデントを増減する"
@@ -26,11 +25,6 @@ set viminfo='20,\"1000
 filetype plugin indent on
 syntax on
 
-" 検索関係
-set incsearch
-set ignorecase
-set smartcase
-
 " Cursor Line Config
 set cursorline         "横のカーソルライン表示"
 "set cursorcolumn       "縦のカーソルライン表示"
@@ -41,12 +35,9 @@ set fileencodings=utf-8,sjis,iso-2022-jp,cp932,euc-jp " 文字コードの自動
 set fileformats=unix,dos,mac " 改行コードの自動判別. 左側が優先される
 
 "Visualモードで選択したものをクリップボードにコピーする"
-set clipboard=unnamed  "clipbordと対応"dd
-set clipboard&
-set clipboard^=unnamedplus
+set clipboard=unnamedplus
 
 " 編集に関する設定
-set ambiwidth=double                    " 2バイト文字でカーソル位置がずれる問題の対策 "
 inoremap <silent> jj <ESC>:<C-u>w<CR>   " save file at returning normal mode "
 noremap <silent><C-H><C-H> :<C-u>set nohlsearch!<CR>
 nnoremap <ESC><ESC> :nohl<CR>
