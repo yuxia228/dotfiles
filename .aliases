@@ -22,6 +22,7 @@ alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
 function mygrep { grep -rnIi "$1" . --color; }
 function slowcat_old { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /dev/null ; }
 function slowcat { bash -c 'while IFS= read -rN1 c; do printf "$c";sleep 0.01;done' < "$1" ; }
+function reset_shell { exec ${SHELL}; }
 
 # for claude code
 alias cc-work='CLAUDE_CONFIG_DIR=~/.claude-work \claude'
