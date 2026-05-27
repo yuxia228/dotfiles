@@ -2,7 +2,7 @@
 
 CURRENT_SHELL=$(basename "$SHELL")
 export EDITOR=${EDITOR:-vim}
-DOTFILES_DIR=`readlink ${HOME}/.commonrc | xargs dirname`
+DOTFILES_DIR=$(dirname "$(readlink -f "${HOME}/.commonrc")")
 update_dotfiles () {
     echo Updating dotfiles
     RET=$(\
