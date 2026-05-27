@@ -76,11 +76,13 @@ fi
 # SSH Agent
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent -s > "${HOME}/.ssh/agent-env"
+    chmod 600 "${HOME}/.ssh/agent-env"
 fi
 if [[ -f "${HOME}/.ssh/agent-env" ]]; then
     . "${HOME}/.ssh/agent-env" > /dev/null
     if ! kill -0 $SSH_AGENT_PID > /dev/null 2>&1; then
         ssh-agent -s > "${HOME}/.ssh/agent-env"
+        chmod 600 "${HOME}/.ssh/agent-env"
     fi
     . "${HOME}/.ssh/agent-env" > /dev/null
     ssh-add -l > /dev/null || ssh-add
