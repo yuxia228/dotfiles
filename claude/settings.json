@@ -1,10 +1,12 @@
 {
-  "theme": "dark",
-  "autoCompact": true,
-  "compactTrigger": 0.6,
-  "verbose": false,
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "language": "japanese",
+  "effortLevel": "medium",
+  "theme": "dark",
+  "verbose": false,
+  "autoCompact": true,
+  "compactTrigger": 0.6
 }
