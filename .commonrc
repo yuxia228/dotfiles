@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SHELL=`ps -p $$ | tail -1 | awk '{print $4}'`
+CURRENT_SHELL=$(basename "$SHELL")
 export EDITOR=${EDITOR:-vim}
 DOTFILES_DIR=`readlink ${HOME}/.commonrc | xargs dirname`
 update_dotfiles () {
@@ -11,7 +11,7 @@ update_dotfiles () {
     echo "$RET"
     echo Rerun init.sh and reload .${SHELL}rc
     ${DOTFILES_DIR}/init.sh
-    source ~/.${SHELL}rc
+    source ~/.${CURRENT_SHELL}rc
 }
 
 check_dotfiles_update_using_github_api () {
