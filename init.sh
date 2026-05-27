@@ -75,15 +75,17 @@ for i in $DOTCONFIGS; do
 done
 
 if [[ "$DRYRUN" != "" ]]; then echo claude code setting:; fi
+mkdir -p ${HOME}/.claude
 mkdir -p ${HOME}/.claude-personal
 mkdir -p ${HOME}/.claude-work
 CONFIGS="$( ls -dF claude/* )"
 for i in $CONFIGS; do
+    ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude-personal/
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude-work/
 done
 
-for path in "${HOME}/.claude-personal" "${HOME}/.claude-work"; do
+for path in "${HOME}/.claude" "${HOME}/.claude-personal" "${HOME}/.claude-work"; do
     ${DRYRUN} mkdir -p $path/skills/genshijin
     ${DRYRUN} curl -so $path/skills/genshijin/SKILL.md \
         https://raw.githubusercontent.com/InterfaceX-co-jp/genshijin/main/skills/genshijin/SKILL.md
