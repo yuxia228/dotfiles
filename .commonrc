@@ -14,32 +14,6 @@ update_dotfiles () {
     source ~/.${CURRENT_SHELL}rc
 }
 
-check_dotfiles_update_using_github_api () {
-    bash -c "wget -q -O- -H https://github.com > /dev/null"
-    if [ $? -ne 0 ]; then
-        return -1
-    fi
-
-    LATEST_SHA=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/yuxia228/dotfiles/commits/main \
-        | grep sha \
-        | head -1 \
-        | cut -d'"' -f 4
-    )
-    CURRENT_SHA=$(cd ${DOTFILES_DIR}; git log main -1 | head -1 | cut -d' ' -f2
-    )
-    if [[ "x" -eq "x$LATEST_SHA" ]]; then # if LATEST_SHA is empty, skip checking.
-        return -1
-    fi
-    echo "LATEST_SHA : $LATEST_SHA" > /dev/stderr
-    echo "CURRENT_SHA: $CURRENT_SHA" > /dev/stderr
-    if [ "$LATEST_SHA" != "$CURRENT_SHA" ];then
-        echo "dotfiles is out of date." > /dev/stderr
-        echo "=> Please update dotfiles to run 'update_dotfiles' on shell" > /dev/stderr
-    fi
-}
-# check_dotfiles_update_using_github_api
-
 append_path () {
     NEW_PATH=${1:-dummy}
     if [[ "$(echo $PATH | grep ${NEW_PATH} )" == "" ]]; then
