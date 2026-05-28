@@ -25,10 +25,8 @@ CTX_WND=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d.
 DURATION_MS=$(echo "$input" | jq -r '.cost.total_duration_ms // 0')
 MINS=$((DURATION_MS / 60000)); SECS=$(((DURATION_MS % 60000) / 1000))
 COST_FMT=$(printf '$%.2f' "$COST")
-FIVE_H=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
-WEEK=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
-[ -n "$FIVE_H" ] && LIMITS_5H="$(printf '%.0f' "$FIVE_H")"
-[ -n "$WEEK" ] && LIMITS_1W="$(printf '%.0f' "$WEEK")"
+LIMITS_5H=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // 0' | cut -d. -f1)
+LIMITS_1W=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // 0' | cut -d. -f1)
 
 echo -e "\
 ${CYAN}[$MODEL]${RESET} 📁 ${DIR##*/} $(print_bar_color ${CTX_WND}) ${CTX_WND}% | \
