@@ -10,8 +10,8 @@ print_bar () {
 }
 print_bar_color () {
     PCT=$1
-    if [ "$PCT" -ge 90 ]; then BAR_COLOR="$RED"
-    elif [ "$PCT" -ge 70 ]; then BAR_COLOR="$YELLOW"
+    if [ "$PCT" -ge 80 ]; then BAR_COLOR="$RED"
+    elif [ "$PCT" -ge 50 ]; then BAR_COLOR="$YELLOW"
     else BAR_COLOR="$GREEN"; fi
     echo -e "${BAR_COLOR}$(print_bar $PCT)${RESET}"
 }
