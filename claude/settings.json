@@ -1,13 +1,17 @@
 {
+  "env": {
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000"
+  },
+  "model": "opusplan",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
   "language": "japanese",
   "effortLevel": "medium",
+  "autoCompactWindow": 200000,
   "theme": "dark",
   "verbose": false,
   "autoCompact": true,
-  "compactTrigger": 0.6,
-  "model": "opusplan"
+  "compactTrigger": 0.6
 }
