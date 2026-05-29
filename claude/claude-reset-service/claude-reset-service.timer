@@ -1,0 +1,20 @@
+[Unit]
+Description=Common timer for systemd user service
+
+[Timer]
+#AccuracySec=1s
+#OnActiveSec=5s
+#OnUnitActiveSec=30s
+
+# Only monday
+#OnCalendar=Mon *-*-* 09:00:00
+# Workday
+#OnCalendar=Mon,Tue,Thu,Wed,Fri *-*-* 09:00:00
+# Every hour
+#OnCalendar=*-*-* *:00:00
+OnCalendar=*-*-* 0,8,13,18,23:00:00
+
+[Install]
+# WantedBy=multi-user.target
+WantedBy=timers.target
+
