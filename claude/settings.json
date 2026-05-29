@@ -8,5 +8,6 @@
   "theme": "dark",
   "verbose": false,
   "autoCompact": true,
-  "compactTrigger": 0.6
+  "compactTrigger": 0.6,
+  "model": "opusplan"
 }
