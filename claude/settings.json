@@ -28,6 +28,17 @@
       }
     ]
   },
+  "permissions": {
+    "allow": [
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(which *)",
+      "Bash(rg *)",
+      "Bash(fdfind *)",
+      "Bash(fd *)"
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
