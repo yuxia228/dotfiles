@@ -85,10 +85,15 @@ for i in $CONFIGS; do
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude-work/
 done
 
+mkdir -p ${SCRIPT_DIR}/claude/plugins/
+git clone https://github.com/InterfaceX-co-jp/genshijin ${SCRIPT_DIR}/claude/plugins/genshijin >/dev/null 2>&1
+git -C ${SCRIPT_DIR}/claude/plugins/genshijin pull
 for path in "${HOME}/.claude" "${HOME}/.claude-personal" "${HOME}/.claude-work"; do
     ${DRYRUN} mkdir -p $path/skills/genshijin
-    ${DRYRUN} curl -so $path/skills/genshijin/SKILL.md \
-        https://raw.githubusercontent.com/InterfaceX-co-jp/genshijin/main/skills/genshijin/SKILL.md
+    rm -rf $path/skills/genshijin*
+    for skill in $(ls ${SCRIPT_DIR}/claude/plugins/genshijin/skills/); do
+        ln -sf ${SCRIPT_DIR}/claude/plugins/genshijin/skills/$skill $path/skills/$skill
+    done
 done
 
 git_config
