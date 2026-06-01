@@ -33,7 +33,7 @@
     "command": "~/.claude/statusline.sh"
   },
   "language": "japanese",
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "autoCompactWindow": 200000,
   "theme": "dark",
   "verbose": false,
