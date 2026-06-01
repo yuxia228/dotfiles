@@ -2,6 +2,17 @@
   "env": {
     "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000"
   },
+  "permissions": {
+    "allow": [
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(which *)",
+      "Bash(rg *)",
+      "Bash(fdfind *)",
+      "Bash(fd *)"
+    ]
+  },
   "model": "opusplan",
   "hooks": {
     "SessionStart": [
@@ -9,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/genshijin-activate.js\"",
+            "command": "node \"${HOME}/.claude/hooks/genshijin-activate.js\"",
             "statusMessage": "原始人モード読込中..."
           }
         ]
@@ -20,23 +31,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"~/.claude/hooks/genshijin-mode-tracker.js\"",
+            "command": "node \"${HOME}/.claude/hooks/genshijin-mode-tracker.js\"",
             "timeout": 5,
             "statusMessage": "原始人モード追跡中..."
           }
         ]
       }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(ls *)",
-      "Bash(find *)",
-      "Bash(grep *)",
-      "Bash(which *)",
-      "Bash(rg *)",
-      "Bash(fdfind *)",
-      "Bash(fd *)"
     ]
   },
   "statusLine": {

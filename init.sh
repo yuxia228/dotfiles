@@ -98,8 +98,8 @@ for path in "${HOME}/.claude-personal" "${HOME}/.claude-work" "${HOME}/.claude";
     # installing hooks
     CLAUDE_CONFIG_DIR=$path ${DRYRUN} ${SCRIPT_DIR}/claude/plugins/genshijin/hooks/install.sh --force | head -1
 done
-# Fix settings.sh uses "~" instead of direct path
-sed -i ${SCRIPT_DIR}/claude/settings.json -e "s|${HOME}|~|"
+# Fix settings.sh uses "${HOME}" instead of direct path
+sed -i ${SCRIPT_DIR}/claude/settings.json -e "s|${HOME}|\${HOME}|"
 
 git_config
 
