@@ -78,23 +78,28 @@ if [[ "$DRYRUN" != "" ]]; then echo claude code setting:; fi
 mkdir -p ${HOME}/.claude
 mkdir -p ${HOME}/.claude-personal
 mkdir -p ${HOME}/.claude-work
-CONFIGS="$( ls -dF claude/* )"
+CONFIGS="$( ls -dF claude/* | grep -v plugins)"
 for i in $CONFIGS; do
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude-personal/
     ${DRYRUN} ln -sf ${SCRIPT_DIR}/$i ${HOME}/.claude-work/
 done
 
-mkdir -p ${SCRIPT_DIR}/claude/plugins/
+${DRYRUN} mkdir -p ${SCRIPT_DIR}/claude/plugins/
 git clone https://github.com/InterfaceX-co-jp/genshijin ${SCRIPT_DIR}/claude/plugins/genshijin >/dev/null 2>&1
 git -C ${SCRIPT_DIR}/claude/plugins/genshijin pull
-for path in "${HOME}/.claude" "${HOME}/.claude-personal" "${HOME}/.claude-work"; do
-    ${DRYRUN} mkdir -p $path/skills/genshijin
-    rm -rf $path/skills/genshijin*
+for path in "${HOME}/.claude-personal" "${HOME}/.claude-work" "${HOME}/.claude"; do
+    # installing skills
+    ${DRYRUN} mkdir -p $path/skills
+    ${DRYRUN} rm -rf $path/skills/genshijin*
     for skill in $(ls ${SCRIPT_DIR}/claude/plugins/genshijin/skills/); do
-        ln -sf ${SCRIPT_DIR}/claude/plugins/genshijin/skills/$skill $path/skills/$skill
+        ${DRYRUN} ln -sf ${SCRIPT_DIR}/claude/plugins/genshijin/skills/$skill $path/skills/$skill
     done
+    # installing hooks
+    CLAUDE_CONFIG_DIR=$path ${DRYRUN} ${SCRIPT_DIR}/claude/plugins/genshijin/hooks/install.sh --force | head -1
 done
+# Fix settings.sh uses "~" instead of direct path
+sed -i ${SCRIPT_DIR}/claude/settings.json -e "s|${HOME}|~|"
 
 git_config
 

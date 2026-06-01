@@ -28,9 +28,15 @@ COST_FMT=$(printf '$%.2f' "$COST")
 LIMITS_5H=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // 0' | cut -d. -f1)
 LIMITS_1W=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // 0' | cut -d. -f1)
 
+GENSHIJIN=""
+if [[ -e "${CLAUDE_CONFIG_DIR}/hooks/genshijin-statusline.sh" ]]; then
+    GENSHIJIN=$( ${CLAUDE_CONFIG_DIR}/hooks/genshijin-statusline.sh )
+fi
+
 echo -e "\
-${CYAN}[$MODEL]${RESET} 📁 ${DIR##*/} $(print_bar_color ${CTX_WND}) ${CTX_WND}% | \
-${YELLOW}${COST_FMT}${RESET} | ⏱️  ${MINS}m ${SECS}s | \
-5h: $(print_bar_color ${LIMITS_5H}) ${LIMITS_5H}% | 7d: $(print_bar_color ${LIMITS_1W}) ${LIMITS_1W}% \
+${CYAN}[$MODEL]${RESET} ${GENSHIJIN} 📁 ${DIR##*/} | ${YELLOW}${COST_FMT}${RESET} | ⏱️  ${MINS}m ${SECS}s \
+"
+echo -e "\
+$(print_bar_color ${CTX_WND}) ${CTX_WND}% | 5h: $(print_bar_color ${LIMITS_5H}) ${LIMITS_5H}% | 7d: $(print_bar_color ${LIMITS_1W}) ${LIMITS_1W}% \
 "
 
