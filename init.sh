@@ -96,7 +96,7 @@ for path in "${HOME}/.claude-personal" "${HOME}/.claude-work" "${HOME}/.claude";
         ${DRYRUN} ln -sf ${SCRIPT_DIR}/claude/plugins/genshijin/skills/$skill $path/skills/$skill
     done
     # installing hooks
-    CLAUDE_CONFIG_DIR=$path ${DRYRUN} ${SCRIPT_DIR}/claude/plugins/genshijin/hooks/install.sh --force | head -1
+    CLAUDE_CONFIG_DIR=$path ${DRYRUN} ${SCRIPT_DIR}/claude/plugins/genshijin/hooks/install.sh --force
 done
 # Fix settings.sh uses "${HOME}" instead of direct path
 sed -i ${SCRIPT_DIR}/claude/settings.json -e "s|${HOME}|\${HOME}|"
