@@ -3,7 +3,7 @@
 DRYRUN=""
 SCRIPT_DIR=$(cd `dirname $0`; pwd)
 cd ${SCRIPT_DIR}
-LN_DIR_OPT=${LN_DIR_OPT:-"-sfd"}
+LN_DIR_OPT=${LN_DIR_OPT:-"-sf"}
 
 ####################################################
 # functions                                        #
