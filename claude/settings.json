@@ -49,5 +49,6 @@
   "theme": "dark",
   "verbose": false,
   "autoCompact": true,
-  "compactTrigger": 0.6
+  "compactTrigger": 0.6,
+  "includeCoAuthoredBy": false
 }
