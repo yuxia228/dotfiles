@@ -24,7 +24,9 @@ function slowcat_old { scriptreplay -t <(yes 0.01 1) <(cat <(echo '') "$1") 2> /
 function slowcat { bash -c 'while IFS= read -rN1 c; do printf "$c";sleep 0.01;done' < "$1" ; }
 function reset_shell { exec ${SHELL}; }
 
-# for claude code
+# for claude code(with headroom)
+alias hcc-work='HEADROOM_TELEMETRY=off CLAUDE_CONFIG_DIR=~/.claude-work headroom wrap \claude'
+alias hcc-personal='HEADROOM_TELEMETRY=off CLAUDE_CONFIG_DIR=~/.claude-personal headroom wrap \claude'
 alias cc-work='CLAUDE_CONFIG_DIR=~/.claude-work \claude'
 alias cc-personal='CLAUDE_CONFIG_DIR=~/.claude-personal \claude'
 alias claude='CLAUDE_CONFIG_DIR=~/.claude-personal claude'
