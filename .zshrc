@@ -130,6 +130,27 @@ demo_console () {
 demo_console_hide_hostname () {
     set_zsh_prompt ${PROMPT_DEFAULT_HIDE_HOSTNAME}
 }
+###############################################
+# Auto restart shell when config is changed   #
+###############################################
+TARGET_FILES=("${HOME}/.zshrc" "${HOME}/.commonrc" "${HOME}/.aliases")
+_get_mtimes () {
+    for file in ${TARGET_FILES[@]}; do
+        RCFILE_LAST_MTIME=$(stat -c %Y -L ${file} 2>/dev/null || stat -f %m ${file} 2>/dev/null)
+        echo -n $RCFILE_LAST_MTIME
+    done
+}
+RCFILES_LAST_MTIME=$(_get_mtimes)
+zshrc_reload_check() {
+    mtime=$(_get_mtimes)
+    if [[ -n "$mtime" && "$mtime" != "$RCFILES_LAST_MTIME" ]]; then
+        echo ".rc files are changed, So reload zsh"
+        exec zsh
+    fi
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd zshrc_reload_check
 
 ###############################################
 # Other settings
