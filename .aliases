@@ -25,6 +25,7 @@ function slowcat { bash -c 'while IFS= read -rN1 c; do printf "$c";sleep 0.01;do
 function reset_shell { exec ${SHELL}; }
 
 # for claude code(with headroom)
+alias install_claude='curl -fsSL https://claude.ai/install.sh | bash && pipx install "headroom-ai[all]" --force'
 alias hcc-work='HEADROOM_TELEMETRY=off CLAUDE_CONFIG_DIR=~/.claude-work headroom wrap \claude'
 alias hcc-personal='HEADROOM_TELEMETRY=off CLAUDE_CONFIG_DIR=~/.claude-personal headroom wrap \claude'
 alias cc-work='CLAUDE_CONFIG_DIR=~/.claude-work \claude'
