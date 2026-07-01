@@ -34,6 +34,12 @@ git_config () {
     git config --global alias.difff "diff --word-diff"
     git config --global alias.mkpatch "format-patch --subject-prefix=PATCH -o ./"
     git config --global alias.mkpatches "mkpatch --cover-letter"
+    # Global ignore
+    GLOBAL_IGNORE=${HOME}/.config/git/ignore
+    mkdir -p $( dirname ${GLOBAL_IGNORE} )
+    if [[ "$(grep /.serena ${GLOBAL_IGNORE})" == "" ]]; then
+        echo "/.serena" >> ${GLOBAL_IGNORE}
+    fi
 }
 
 ####################################################
