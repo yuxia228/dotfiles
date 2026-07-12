@@ -1,7 +1,8 @@
 {
   "env": {
     "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000",
-    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
