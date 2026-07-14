@@ -106,12 +106,14 @@ for path in "${HOME}/.claude-personal" "${HOME}/.claude-work" "${HOME}/.claude";
     done
     # installing hooks
     CLAUDE_CONFIG_DIR=$path ${DRYRUN} ${SCRIPT_DIR}/claude/plugins/genshijin/hooks/install.sh --force
-
-    # installing hooks for RTK(installed with Headroom)
-    if [[ "$path" != "${HOME}/.claude" ]]; then
-        ln -sf ${HOME}/.claude/RTK.md $path/RTK.md
-        ln -sf ${HOME}/.claude/hooks/rtk-rewrite.sh $path/rtk-rewrite.sh
-    fi
+done
+# Setup RTK
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+$HOME/.local/bin/rtk init -g --auto-patch
+for path in "${HOME}/.claude-personal" "${HOME}/.claude-work" "${HOME}/.claude"; do
+    # Add link to files
+    ln -sf ${HOME}/.claude/RTK.md $path/RTK.md
+    ln -sf ${HOME}/.claude/hooks/rtk-rewrite.sh $path/rtk-rewrite.sh
 done
 # Fix settings.sh uses "${HOME}" instead of direct path
 sed -i ${SCRIPT_DIR}/claude/settings.json -e "s|${HOME}|\${HOME}|"
