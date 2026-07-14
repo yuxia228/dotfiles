@@ -37,9 +37,12 @@ git_config () {
     # Global ignore
     GLOBAL_IGNORE=${HOME}/.config/git/ignore
     mkdir -p $( dirname ${GLOBAL_IGNORE} )
-    if [[ "$(grep /.serena ${GLOBAL_IGNORE})" == "" ]]; then
-        echo "/.serena" >> ${GLOBAL_IGNORE}
-    fi
+    targets=("/.serena" "/.tokensave")
+    for target in ${targets[@]}; do
+        if [[ "$(grep ${target} ${GLOBAL_IGNORE})" == "" ]]; then
+            echo "${target}" >> ${GLOBAL_IGNORE}
+        fi
+    done
 }
 
 ####################################################
