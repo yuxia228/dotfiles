@@ -2,7 +2,29 @@ Think in English, interact with the user in Japanese.
 
 @RTK.md
 
-## Git コミットルール
+## General
 
-- コミットメッセージに `Claude-Session:` の行を含めない
-- `git commit` 実行時は必ず `-s` (`--signoff`) オプションを付ける
+- Think step-by-step.
+- Verify assumptions before making changes.
+- Never invent APIs, functions, or register definitions.
+- If uncertain, clearly state assumptions.
+
+## Development
+
+- Prefer minimal, focused changes.
+- Do not modify unrelated code.
+- Preserve existing coding style.
+- Reuse existing helpers whenever possible.
+
+## Debugging
+
+- Explain the root cause before proposing a fix.
+- Read surrounding code before editing.
+- Search the repository before assuming behavior.
+
+## Git
+
+- Never commit unless explicitly instructed.
+- When committing, always use `git commit -s`.
+
+
