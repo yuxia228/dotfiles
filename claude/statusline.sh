@@ -40,3 +40,5 @@ echo -e "\
 ctx: $(print_bar_color ${CTX_WND}) ${CTX_WND}% | 5h: $(print_bar_color ${LIMITS_5H}) ${LIMITS_5H}% | 7d: $(print_bar_color ${LIMITS_1W}) ${LIMITS_1W}% \
 "
 
+echo ${input} > ${CLAUDE_CONFIG_DIR}/claude-status.json
+
