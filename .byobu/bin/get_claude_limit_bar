@@ -7,8 +7,8 @@ if [[ ! -e ~/.claude-personal/claude-status.json ]]; then
     exit
 fi
 
-LIMIT_5H="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.five_hour.used_percentage')"
-LIMIT_7D="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.seven_day.used_percentage')"
+LIMIT_5H="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.five_hour.used_percentage' | xargs printf "%d")"
+LIMIT_7D="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.seven_day.used_percentage' | xargs printf "%d")"
 
 get_color () {
     VAL=$1
