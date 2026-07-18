@@ -1,0 +1,50 @@
+#!/bin/bash
+
+COUNT=6
+
+# Fail check
+if [[ ! -e ~/.claude-personal/claude-status.json ]]; then
+    exit
+fi
+
+LIMIT_5H="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.five_hour.used_percentage')"
+LIMIT_7D="$(cat ~/.claude-personal/claude-status.json | jq '.rate_limits.seven_day.used_percentage')"
+
+get_color () {
+    VAL=$1
+    case "$(( $VAL / 20 ))" in
+        "0") color=blue ;;
+        "1") color=green ;;
+        "2") color=yellow ;;
+        "3") color=colour166 ;;
+        "4") color=red ;;
+        *  ) color=red ;;
+    esac
+    echo $color
+}
+
+get_bar () {
+    VAL=$1
+    COUNT=${2:-$COUNT}
+
+    BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
+    _BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
+    _BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
+    # bar is block
+    BAR=`for i in $(seq ${BAR_NUM}); do echo -ne "\u2588"; done`
+    # bar is '|'
+    #BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
+    echo ${BAR}${_BAR}
+}
+
+color_5h=$(get_color $LIMIT_5H)
+color_7d=$(get_color $LIMIT_7D)
+
+bar_5h=$(get_bar $LIMIT_5H})
+bar_7d=$(get_bar $LIMIT_7D})
+
+STATUS_5H="5H:#[fg=$color_5h]${LIMIT_5H}%[${bar_5h}]#[default]"
+STATUS_7D="7D:#[fg=$color_7d]${LIMIT_7D}%[${bar_7d}]#[default]"
+
+echo "${STATUS_5H} ${STATUS_7D}"
+
