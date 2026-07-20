@@ -26,5 +26,5 @@ Think in English, interact with the user in Japanese.
 
 - Never commit unless explicitly instructed.
 - When committing, always use `git commit -s`.
-
+- Never run `git push` unless explicitly instructed.
 
