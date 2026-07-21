@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR=$(cd `dirname $0` && pwd)
+AUTO_COMPACT_SIZE=$(cat ${SCRIPT_DIR}/settings.json| jq '.env["CLAUDE_CODE_AUTO_COMPACT_WINDOW"]' | bc | xargs -i echo "{}/1000" | bc)
+
 CYAN='\033[36m'; GREEN='\033[32m'; YELLOW='\033[33m'; RED='\033[31m'; RESET='\033[0m'
 print_bar () {
     PCT=$1
@@ -21,12 +24,13 @@ input=$(cat)
 MODEL=$(echo "$input" | jq -r '.model.display_name')
 DIR=$(echo "$input" | jq -r '.workspace.current_dir')
 COST=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-CTX_WND=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1)
+CTX_WND_USED=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1)
 DURATION_MS=$(echo "$input" | jq -r '.cost.total_duration_ms // 0')
 MINS=$((DURATION_MS / 60000)); SECS=$(((DURATION_MS % 60000) / 1000))
 COST_FMT=$(printf '$%.2f' "$COST")
 LIMITS_5H=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // 0' | cut -d. -f1)
 LIMITS_1W=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // 0' | cut -d. -f1)
+CTX_WND=$(( $CTX_WND_USED * 1000 / $AUTO_COMPACT_SIZE ))
 
 GENSHIJIN=""
 if [[ -e "${CLAUDE_CONFIG_DIR}/hooks/genshijin-statusline.sh" ]]; then
