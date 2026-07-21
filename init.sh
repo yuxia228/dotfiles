@@ -39,7 +39,7 @@ git_config () {
     mkdir -p $( dirname ${GLOBAL_IGNORE} )
     targets=("/.serena" "/.tokensave" "/.claude")
     for target in ${targets[@]}; do
-        if [[ "$(grep ${target} ${GLOBAL_IGNORE})" == "" ]]; then
+        if [[ "$(grep "^${target}" ${GLOBAL_IGNORE})" == "" ]]; then
             echo "${target}" >> ${GLOBAL_IGNORE}
         fi
     done
