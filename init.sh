@@ -37,7 +37,7 @@ git_config () {
     # Global ignore
     GLOBAL_IGNORE=${HOME}/.config/git/ignore
     mkdir -p $( dirname ${GLOBAL_IGNORE} )
-    targets=("/.serena" "/.tokensave")
+    targets=("/.serena" "/.tokensave" "/.claude")
     for target in ${targets[@]}; do
         if [[ "$(grep ${target} ${GLOBAL_IGNORE})" == "" ]]; then
             echo "${target}" >> ${GLOBAL_IGNORE}
