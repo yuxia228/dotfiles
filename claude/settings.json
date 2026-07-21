@@ -14,6 +14,9 @@
       "Bash(rg *)",
       "Bash(fdfind *)",
       "Bash(fd *)"
+    ],
+    "deny": [
+      "NotebookEdit"
     ]
   },
   "hooks": {
@@ -57,11 +60,13 @@
     "command": "~/.claude/statusline.sh",
     "refreshInterval": 5
   },
+  "includeGitInstructions": false,
+  "disableWorkflows": true,
+  "disableArtifact": true,
   "language": "japanese",
   "effortLevel": "medium",
   "theme": "dark",
   "verbose": false,
   "autoCompact": true,
-  "compactTrigger": 0.6,
   "model": "sonnet[1m]"
 }
