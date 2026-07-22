@@ -22,6 +22,7 @@ print_bar_color () {
 input=$(cat)
 
 MODEL=$(echo "$input" | jq -r '.model.display_name')
+EFFORT=$(echo "$input" | jq -r '.effort.level')
 DIR=$(echo "$input" | jq -r '.workspace.current_dir')
 COST=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
 CTX_WND_USED=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | cut -d. -f1)
@@ -38,7 +39,7 @@ if [[ -e "${CLAUDE_CONFIG_DIR}/hooks/genshijin-statusline.sh" ]]; then
 fi
 
 echo -e "\
-${CYAN}[$MODEL]${RESET} ${GENSHIJIN} 📁 ${DIR##*/} | ${YELLOW}${COST_FMT}${RESET} | ⏱️  ${MINS}m ${SECS}s \
+${CYAN}[$MODEL]${RESET} ${EFFORT} ${GENSHIJIN} 📁 ${DIR##*/} | ${YELLOW}${COST_FMT}${RESET} | ⏱️  ${MINS}m ${SECS}s \
 "
 echo -e "\
 ctx: $(print_bar_color ${CTX_WND}) ${CTX_WND}% | 5h: $(print_bar_color ${LIMITS_5H}) ${LIMITS_5H}% | 7d: $(print_bar_color ${LIMITS_1W}) ${LIMITS_1W}% \
