@@ -179,8 +179,7 @@ fi
 if [ -e ${PYENV_ROOT} ]; then
     export PYENV_ROOT="$HOME/.local_pyenv"
     append_path ${PYENV_ROOT}/bin
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
+    append_path ${PYENV_ROOT}/plugins/pyenv-virtualenv/shims
 fi
 
 # rbenv
