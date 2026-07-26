@@ -17,6 +17,12 @@ alias dd='dd status=progress'
 alias sshh="ssh -o 'StrictHostKeyChecking no'"
 alias maintmux="tmux -u a -t main || tmux -u new -s main"
 alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
+which batcat 2>&1 > /dev/null
+if [[ "$?" == "0" ]]; then
+    alias bat='batcat'
+else
+    unalias bat
+fi
 
 # useful functions
 function mygrep { grep -rnIi "$1" . --color; }
