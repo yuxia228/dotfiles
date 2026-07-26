@@ -195,6 +195,8 @@ if [ -e ${RBENV_ROOT} ]; then
     eval "$(rbenv init - bash)"
 fi
 
+# opencode
+export PATH=${HOME}/.opencode/bin:$PATH
 
 #################################
 # zprof
