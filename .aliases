@@ -38,3 +38,6 @@ alias cc-work='CLAUDE_CONFIG_DIR=~/.claude-work \claude'
 alias cc-personal='CLAUDE_CONFIG_DIR=~/.claude-personal \claude'
 alias claude='CLAUDE_CONFIG_DIR=~/.claude-personal claude'
 
+# For opencode
+alias opencode='opencode --auto'
+
