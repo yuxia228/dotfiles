@@ -179,6 +179,7 @@ fi
 if [ -e ${PYENV_ROOT} ]; then
     export PYENV_ROOT="$HOME/.local_pyenv"
     append_path ${PYENV_ROOT}/bin
+    append_path ${PYENV_ROOT}/shims
     append_path ${PYENV_ROOT}/plugins/pyenv-virtualenv/shims
 fi
 
