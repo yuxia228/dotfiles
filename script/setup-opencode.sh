@@ -6,6 +6,8 @@ curl -fsSL https://opencode.ai/install | bash
 
 mkdir -p ${HOME}/.config/opencode/
 ln -sf  ${SCRIPT_DIR}/../opencode/opencode.json ${HOME}/.config/opencode/opencode.json
+ln -sf  ${SCRIPT_DIR}/../claude/CLAUDE.md ${HOME}/.config/opencode/AGENTS.md
+rtk init -g --opencode
 
 # install plugin
 git clone https://github.com/ByBrawe/opencode-loop.git --depth=1
