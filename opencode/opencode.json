@@ -28,7 +28,7 @@
         "main": {
           "name": "main",
           "limit": {
-            "context": 40960,
+            "context": 102400,
             "output": 4096
           }
         }
