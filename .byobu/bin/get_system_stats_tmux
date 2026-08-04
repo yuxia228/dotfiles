@@ -1,0 +1,83 @@
+#!/bin/bash
+
+CACHE_FILE="/tmp/.get_cpu_load_bar_cache_$UID"
+COUNT=8
+
+bar () {
+    local val=$1 count=$2 color=$3
+    local bar_num=$((val * count / 100))
+    local rest_num=$((count - bar_num))
+    local bar="" rest=""
+    for ((i = 0; i < bar_num; i++)); do bar+=$'█'; done
+    for ((i = 0; i < rest_num; i++)); do rest+='_'; done
+    echo "#[fg=$color]${bar}#[default]${rest}"
+}
+
+color_for () {
+    local val=$1
+    if   (( val < 20 )); then echo blue
+    elif (( val < 40 )); then echo green
+    elif (( val < 60 )); then echo yellow
+    elif (( val < 80 )); then echo colour166
+    else                      echo red
+    fi
+}
+
+# --- CPU ---
+read -r _ user nice sys idle _ < /proc/stat
+LOAD=$((user + nice + sys))
+TOTAL=$((user + nice + sys + idle))
+
+if [ -f "$CACHE_FILE" ]; then
+    read -r PREV_LOAD PREV_TOTAL < "$CACHE_FILE"
+else
+    PREV_LOAD=$LOAD
+    PREV_TOTAL=$TOTAL
+fi
+echo "$LOAD $TOTAL" > "$CACHE_FILE"
+
+DIFF_LOAD=$((LOAD - PREV_LOAD))
+DIFF_TOTAL=$((TOTAL - PREV_TOTAL))
+
+if [ "$DIFF_TOTAL" -le 0 ]; then
+    CPU_VAL=0
+else
+    CPU_VAL=$((100 * DIFF_LOAD / DIFF_TOTAL))
+fi
+CPU_BAR="C[$(bar "$CPU_VAL" "$COUNT" "$(color_for "$CPU_VAL")")]"
+
+# --- RAM ---
+while read -r key value _; do
+    case "$key" in
+        MemTotal:) MEM_TOTAL=$value ;;
+        MemAvailable:) MEM_AVAIL=$value ;;
+    esac
+done < /proc/meminfo
+RAM_VAL=$(((MEM_TOTAL - MEM_AVAIL) * 100 / MEM_TOTAL))
+RAM_BAR="M[$(bar "$RAM_VAL" "$COUNT" "$(color_for "$RAM_VAL")")]"
+
+# --- Load average ---
+read -r load_ave _ < /proc/loadavg
+core_num=0
+while read -r line; do
+    case $line in
+        processor*) ((core_num++)) ;;
+    esac
+done < /proc/cpuinfo
+
+load_int=${load_ave%.*}
+load_frac=${load_ave#*.}
+load_x100=$((load_int * 100 + 10#$load_frac))
+
+if   (( load_x100 < core_num * 40 )); then
+    load_color=blue
+elif (( load_x100 < core_num * 70 )); then
+    load_color=yellow
+elif (( load_x100 < core_num * 100 )); then
+    load_color="colour166"
+else
+    load_color=red
+fi
+LOAD_STR="#[bg=$load_color]${load_ave}#[default]"
+
+echo "${CPU_BAR}|${RAM_BAR}|${LOAD_STR}"
