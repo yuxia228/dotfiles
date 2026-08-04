@@ -1,16 +1,27 @@
 #!/bin/bash
 
-SLEEP_SEC=1.0
+CACHE_FILE="/tmp/.get_cpu_load_bar_cache_$UID"
 
 STAT=`head -1 /proc/stat`
 LOAD=`echo $STAT | awk '{printf "%d", ($2+$3+$4)}'`
 TOTAL=`echo $STAT | awk '{printf "%d", ($2+$3+$4+$5)}'`
-sleep $SLEEP_SEC
-STAT=`head -1 /proc/stat`
-LOAD=`echo $STAT | awk '{printf "%d", ($2+$3+$4)}' | xargs -i echo "{} - $LOAD" | bc`
-TOTAL=`echo $STAT | awk '{printf "%d", ($2+$3+$4+$5)}' | xargs -i echo "{} - $TOTAL" | bc`
 
-CPU_LOAD=`echo "100 * $LOAD / $TOTAL" | bc`
+if [ -f "$CACHE_FILE" ]; then
+    read PREV_LOAD PREV_TOTAL < "$CACHE_FILE"
+else
+    PREV_LOAD=$LOAD
+    PREV_TOTAL=$TOTAL
+fi
+echo "$LOAD $TOTAL" > "$CACHE_FILE"
+
+DIFF_LOAD=$((LOAD - PREV_LOAD))
+DIFF_TOTAL=$((TOTAL - PREV_TOTAL))
+
+if [ "$DIFF_TOTAL" -le 0 ]; then
+    CPU_LOAD=0
+else
+    CPU_LOAD=`echo "100 * $DIFF_LOAD / $DIFF_TOTAL" | bc`
+fi
 CPU_LOAD_STR="CPU:${CPU_LOAD}%"
 
 VAL=${CPU_LOAD}
