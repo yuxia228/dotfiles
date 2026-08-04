@@ -1,30 +1,34 @@
 #!/bin/bash
 
-VAL=`free | grep Mem | awk '{printf "%d", ($2-$7)/$2*100}'` # (total-avail)/total*100
+while read -r key value _; do
+    case "$key" in
+        MemTotal:) MEM_TOTAL=$value ;;
+        MemAvailable:) MEM_AVAIL=$value ;;
+    esac
+done < /proc/meminfo
+
+VAL=$(((MEM_TOTAL - MEM_AVAIL) * 100 / MEM_TOTAL))
 LOAD_STR="RAM:${VAL}%"
 
-if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
+if   (( VAL < 20 )); then
     color=blue
-elif [ "`echo "$VAL < 40" | bc`" -eq "1" ]; then
+elif (( VAL < 40 )); then
     color=green
-elif [ "`echo "$VAL < 60" | bc`" -eq "1" ]; then
+elif (( VAL < 60 )); then
     color=yellow
-elif [ "`echo "$VAL < 80" | bc`" -eq "1" ]; then
+elif (( VAL < 80 )); then
     color="colour166"  # orange
 else
     color=red
 fi
 
 COUNT=8
-BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
-_BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
-_BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
+BAR_NUM=$((VAL * COUNT / 100))
+_BAR_NUM=$((COUNT - BAR_NUM))
 
-# bar is '|'
-#BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
-#echo "M[#[bg=$color]${BAR}#[default]${_BAR}]"
+BAR=""
+for ((i = 0; i < BAR_NUM; i++)); do BAR+=$'█'; done
+_BAR=""
+for ((i = 0; i < _BAR_NUM; i++)); do _BAR+='_'; done
 
-# bar is block
-BAR=`for i in $(seq ${BAR_NUM}); do echo -ne "\u2588"; done`
 echo "M[#[fg=$color]${BAR}#[default]${_BAR}]"
-

@@ -2,12 +2,12 @@
 
 CACHE_FILE="/tmp/.get_cpu_load_bar_cache_$UID"
 
-STAT=`head -1 /proc/stat`
-LOAD=`echo $STAT | awk '{printf "%d", ($2+$3+$4)}'`
-TOTAL=`echo $STAT | awk '{printf "%d", ($2+$3+$4+$5)}'`
+read -r _ user nice sys idle _ < /proc/stat
+LOAD=$((user + nice + sys))
+TOTAL=$((user + nice + sys + idle))
 
 if [ -f "$CACHE_FILE" ]; then
-    read PREV_LOAD PREV_TOTAL < "$CACHE_FILE"
+    read -r PREV_LOAD PREV_TOTAL < "$CACHE_FILE"
 else
     PREV_LOAD=$LOAD
     PREV_TOTAL=$TOTAL
@@ -20,34 +20,31 @@ DIFF_TOTAL=$((TOTAL - PREV_TOTAL))
 if [ "$DIFF_TOTAL" -le 0 ]; then
     CPU_LOAD=0
 else
-    CPU_LOAD=`echo "100 * $DIFF_LOAD / $DIFF_TOTAL" | bc`
+    CPU_LOAD=$((100 * DIFF_LOAD / DIFF_TOTAL))
 fi
 CPU_LOAD_STR="CPU:${CPU_LOAD}%"
 
 VAL=${CPU_LOAD}
 
-if   [ "`echo "$VAL < 20" | bc`" -eq "1" ]; then
+if   (( VAL < 20 )); then
     color=blue
-elif [ "`echo "$VAL < 40" | bc`" -eq "1" ]; then
+elif (( VAL < 40 )); then
     color=green
-elif [ "`echo "$VAL < 60" | bc`" -eq "1" ]; then
+elif (( VAL < 60 )); then
     color=yellow
-elif [ "`echo "$VAL < 80" | bc`" -eq "1" ]; then
+elif (( VAL < 80 )); then
     color="colour166"  # orange
 else
     color=red
 fi
 
 COUNT=8
-BAR_NUM=`echo $VAL $COUNT| awk '{printf "%d", $1/(100/$2)}'`
-_BAR_NUM=`echo $COUNT - $BAR_NUM | bc`
-_BAR=`for i in $(seq ${_BAR_NUM}); do echo -n '_'; done`
+BAR_NUM=$((VAL * COUNT / 100))
+_BAR_NUM=$((COUNT - BAR_NUM))
 
-# bar is '|'
-#BAR=`for i in $(seq ${BAR_NUM}); do echo -n '|'; done`
-#echo "C[#[bg=$color]${BAR}#[default]${_BAR}]"
+BAR=""
+for ((i = 0; i < BAR_NUM; i++)); do BAR+=$'█'; done
+_BAR=""
+for ((i = 0; i < _BAR_NUM; i++)); do _BAR+='_'; done
 
-# bar is block
-BAR=`for i in $(seq ${BAR_NUM}); do echo -ne "\u2588"; done`
 echo "C[#[fg=$color]${BAR}#[default]${_BAR}]"
-
