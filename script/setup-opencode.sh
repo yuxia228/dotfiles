@@ -4,10 +4,11 @@ SCRIPT_DIR=$(cd `dirname $0` && pwd)
 
 curl -fsSL https://opencode.ai/install | bash
 
-mkdir -p ${HOME}/.config/opencode/
+mkdir -p ${HOME}/.config/opencode/agents/
 ln -sf  ${SCRIPT_DIR}/../opencode/opencode.json ${HOME}/.config/opencode/opencode.json
 ln -sf  ${SCRIPT_DIR}/../claude/CLAUDE.md ${HOME}/.config/opencode/CLAUDE.md
 ln -sf  ${SCRIPT_DIR}/../opencode/AGENTS.md ${HOME}/.config/opencode/AGENTS.md
+ln -sf  ${SCRIPT_DIR}/../opencode/explorer.md ${HOME}/.config/opencode/agents/
 rtk init -g --opencode
 
 # install plugin

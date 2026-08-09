@@ -50,5 +50,15 @@
         }
       }
     }
+  },
+  "agent": {
+    "explorer": {
+      "description": "コードベースを調査する軽量サブエージェント",
+      "mode": "subagent",
+      "model": "server-sub/sub",
+      "permission": {
+        "edit": "deny"
+      }
+    }
   }
 }
