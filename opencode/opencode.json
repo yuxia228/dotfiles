@@ -52,6 +52,13 @@
     }
   },
   "agent": {
+    "build": {
+      "permission": {
+        "task": {
+          "explorer": "allow"
+        }
+      }
+    },
     "explorer": {
       "description": "コードベースを調査する軽量サブエージェント",
       "mode": "subagent",
