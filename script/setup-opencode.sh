@@ -21,7 +21,7 @@ rm -rf opencode-loop
 # setup global gitignore
 GLOBAL_IGNORE=${HOME}/.config/git/ignore
 mkdir -p $( dirname ${GLOBAL_IGNORE} )
-targets=("/.opencode")
+targets=(".opencode")
 for target in ${targets[@]}; do
     if [[ "$(grep "^${target}" ${GLOBAL_IGNORE})" == "" ]]; then
         echo "${target}" >> ${GLOBAL_IGNORE}
