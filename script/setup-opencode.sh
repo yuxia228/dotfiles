@@ -18,6 +18,9 @@ chmod +x ./scripts/install.sh
 ./scripts/install.sh
 cd ../
 rm -rf opencode-loop
+# cleanup: Remove specific version from opencode.json
+sed -i ${SCRIPT_DIR}/../opencode/opencode.json \
+    -e 's|@bybrawe/opencode-loop@.*"]|@bybrawe/opencode-loop"]|'
 
 # setup global gitignore
 GLOBAL_IGNORE=${HOME}/.config/git/ignore
