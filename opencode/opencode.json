@@ -27,6 +27,10 @@
       "models": {
         "main": {
           "name": "main",
+          "modalities": {
+              "input": ["text", "image"],
+              "output": ["text"]
+          },
           "limit": {
             "context": 80000,
             "output": 16384
