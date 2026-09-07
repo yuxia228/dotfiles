@@ -1,0 +1,75 @@
+#!/bin/bash
+
+CLAUDE_USAGE_API="https://api.anthropic.com/api/oauth/usage"
+CLAUDE_CREDENTIAL=${CLAUDE_CREDENTIAL:-${HOME}/.claude-personal/.credentials.json}
+
+CACHE_ALIVE="60" # 1min
+CACHE_FILE="/dev/shm/.claude_status"
+TOKEN=$(jq -r '.claudeAiOauth.accessToken' "${CLAUDE_CREDENTIAL}" 2>/dev/null)
+if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+    echo Auth required
+    exit 0
+fi
+
+get_color () {
+    VAL=${1%.*}
+    case "$(( VAL / 20 ))" in
+        "0") color=blue ;;
+        "1") color=green ;;
+        "2") color=yellow ;;
+        "3") color=colour166 ;;
+        *  ) color=red ;;
+    esac
+    echo $color
+}
+
+is_update_cache() {
+    if [[ ! -e "$CACHE_FILE" ]]; then
+        return 1
+    fi
+    CACHE_ELAPSED_SEC=$(( $(date +%s) - $(stat -c %Y "$CACHE_FILE" 2>/dev/null || echo 0) ))
+    if [[ ${CACHE_ELAPSED_SEC} -gt ${CACHE_ALIVE} ]]; then
+        return 1
+    fi
+}
+
+get_usage() {
+    if is_update_cache; then
+        cat "$CACHE_FILE"
+        return 0
+    fi
+    RESPONSE=$(curl -sf \
+        -H "Accept: application/json" \
+        -H "Authorization: Bearer $TOKEN" \
+        -H "anthropic-beta: oauth-2025-04-20" \
+        ${CLAUDE_USAGE_API} 2>/dev/null)
+    USAGE=$(echo ${RESPONSE} |  jq -r '[
+        .five_hour.utilization // 0,
+        .seven_day.utilization // 0,
+        .five_hour.resets_at // "",
+        .seven_day.resets_at // ""
+        ] | @tsv')
+    LIMIT_5H=$(echo $USAGE | awk '{print $1}')
+    LIMIT_7D=$(echo $USAGE | awk '{print $2}')
+    _RESET_5H=$(echo $USAGE | awk '{print $3}')
+    _RESET_7D=$(echo $USAGE | awk '{print $4}')
+
+    today=$(date +%s)
+    five_reset=$(date --date "${_RESET_5H}" +%s)
+    seven_reset=$(date --date "${_RESET_7D}" +%s)
+    RESET_5H=$(( (${five_reset} - ${today} ) / 3600 ))
+    RESET_7D=$(( (${seven_reset} - ${today} ) / 3600 ))
+    OUTPUT="5H:#[fg=$(get_color $LIMIT_5H)]${LIMIT_5H}(<${RESET_5H}h)#[default]"
+    OUTPUT+="7D:#[fg=$(get_color $LIMIT_7D)]${LIMIT_7D}(<${RESET_7D}h)#[default]"
+    echo ${OUTPUT} | tee ${CACHE_FILE}
+    echo ${RESPONSE} > ${CACHE_FILE}.raw
+}
+
+get_usage
+
+exit
+
+STATUS_5H="5H:#[fg=$color_5h]${LIMIT_5H}%[${bar_5h}]#[default]"
+STATUS_7D="7D:#[fg=$color_7d]${LIMIT_7D}%[${bar_7d}]#[default]"
+
+echo "${STATUS_5H} ${STATUS_7D}"
