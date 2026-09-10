@@ -1,6 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@bybrawe/opencode-loop"],
+  "disabled_providers": ["opencode"],
+  "plugin": [
+    "@bybrawe/opencode-loop@0.5.36"
+  ],
+  "model": "server/main",
+  "small_model": "server-sub/sub",
   "provider": {
     "local": {
       "npm": "@ai-sdk/openai-compatible",
@@ -12,8 +17,8 @@
         "local": {
           "name": "localhost",
           "limit": {
-            "context": 40960,
-            "output": 4096
+            "context": 130000,
+            "output": 32768
           }
         }
       }
@@ -32,8 +37,8 @@
               "output": ["text"]
           },
           "limit": {
-            "context": 80000,
-            "output": 16384
+            "context": 130000,
+            "output": 32768
           }
         }
       }
@@ -48,8 +53,8 @@
         "sub": {
           "name": "sub",
           "limit": {
-            "context": 40960,
-            "output": 4096
+            "context": 80000,
+            "output": 32768
           }
         }
       }
@@ -64,7 +69,7 @@
       }
     },
     "explorer": {
-      "description": "コードベースを調査する軽量サブエージェント",
+      "description": "コードベースを高速に調査する軽量サブエージェント。関連ファイル、関数、クラス、参照箇所、設定、TODOなどを探索する用途に使用する。コードの設計や複雑な問題解決、ファイル編集には使用しない。",
       "mode": "subagent",
       "model": "server-sub/sub",
       "permission": {
