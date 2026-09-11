@@ -40,7 +40,6 @@ alias claude='CLAUDE_CONFIG_DIR=~/.claude-personal claude'
 
 # For opencode
 alias opencode='opencode --auto'
-alias llm-local='opencode --auto --model local/local'
-alias llm-main='opencode --auto --model server/main'
-alias llm-sub='opencode --auto --model server-sub/sub'
+alias llm-main='opencode --auto --model main/main'
+alias llm-sub='opencode --auto --model sub/sub'
 
