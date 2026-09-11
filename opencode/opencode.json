@@ -4,8 +4,8 @@
   "plugin": [
     "@bybrawe/opencode-loop@0.5.36"
   ],
-  "model": "server/main",
-  "small_model": "server-sub/sub",
+  "model": "main/main",
+  "small_model": "sub/sub",
   "provider": {
     "main": {
       "npm": "@ai-sdk/openai-compatible",
