@@ -52,8 +52,8 @@ get_usage() {
     USAGE=$(echo ${RESPONSE} |  jq -r '[
         .five_hour.utilization // 0,
         .seven_day.utilization // 0,
-        .five_hour.resets_at // "",
-        .seven_day.resets_at // ""
+        .five_hour.resets_at // "0",
+        .seven_day.resets_at // "0"
         ] | @tsv')
     _LIMIT_5H=$(echo $USAGE | awk '{print $1}')
     _LIMIT_7D=$(echo $USAGE | awk '{print $2}')
