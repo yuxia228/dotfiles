@@ -1,0 +1,186 @@
+#!/bin/bash
+# tmx - switch between tmux servers (one server per project; "main" = default socket)
+#
+#   tmx                              list running servers
+#   tmx <name>                       attach to server <name> (create if missing)
+#                                    inside tmux: switch this client to it instead
+#   tmx --switch <name> [client]     switch <client> to server <name>
+#   tmx --cycle next|prev [client]   switch <client> to the next/previous server
+#   tmx --status <socket_path>       status-bar string (for status-left)
+#   tmx --menu <client>              server menu: switch / new / kill (F10)
+#   tmx --kill <name>                kill server <name> (not the current one)
+#   tmx --nth <N> [client]           switch to the N-th server (same order as the menu)
+#
+# F10 / Alt+s / prefix+S in .tmux.conf call "tmx --menu", Alt+1..9 call "tmx --nth".
+
+SELF=$(readlink -f "$0")
+SOCK_DIR="${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)"
+
+usage() {
+    sed -n '2,15p' "$SELF" | sed 's/^# \{0,1\}//'
+    exit "${1:-0}"
+}
+
+# "main" is the default socket; every other server uses a socket of the same name
+sock_of() { [ "$1" = main ] && echo default || echo "$1"; }
+name_of() { [ "$1" = default ] && echo main || echo "$1"; }
+srv() { local name=$1; shift; tmux -L "$(sock_of "$name")" "$@"; }
+
+valid_name() {
+    [[ $1 =~ ^[A-Za-z0-9._-]+$ ]] && return 0
+    echo "tmx: invalid server name: '$1' (use A-Z a-z 0-9 . _ -)" >&2
+    return 1
+}
+
+# running servers, "main" first
+alive_servers() {
+    local f name
+    for f in "$SOCK_DIR"/*; do
+        [ -S "$f" ] || continue
+        name=$(name_of "${f##*/}")
+        srv "$name" has-session 2>/dev/null && echo "$name"
+    done | awk '{print ($0 == "main" ? "0 " : "1 ") $0}' | sort | cut -d' ' -f2
+}
+
+# server the calling tmux pane belongs to (empty outside tmux)
+current_server() {
+    [ -n "$TMUX" ] || return 0
+    name_of "$(basename "${TMUX%%,*}")"
+}
+
+# attach to (or create) server <name> in this terminal
+attach() {
+    valid_name "$1" || exit 1
+    unset TMUX
+    exec tmux -u -L "$(sock_of "$1")" new-session -A -s "$1"
+}
+
+# detach <client> from its server and attach it to <name> in the same terminal
+switch_client() {
+    local name=$1 client=$2
+    valid_name "$name" || return 1
+    tmux detach-client -E "$(printf '%q --attach %q' "$SELF" "$name")" ${client:+-t "$client"}
+}
+
+cycle() {
+    local dir=$1 client=$2 cur i n target
+    local -a list
+    cur=$(current_server)
+    mapfile -t list < <(alive_servers)
+    n=${#list[@]}
+    if [ "$n" -lt 2 ]; then
+        tmux display-message ${client:+-c "$client"} "tmx: no other tmux server (create one: tmx <name>)"
+        return 0
+    fi
+    for i in "${!list[@]}"; do [ "${list[$i]}" = "$cur" ] && break; done
+    [ "$i" -ge "$n" ] && i=0
+    if [ "$dir" = next ]; then
+        target=${list[$(((i + 1) % n))]}
+    else
+        target=${list[$(((i + n - 1) % n))]}
+    fi
+    switch_client "$target" "$client"
+}
+
+# switch to the N-th running server (menu order: main first, then by name)
+nth() {
+    local n=$1 client=$2 target
+    [[ $n =~ ^[1-9][0-9]*$ ]] || { echo "tmx: invalid number: '$n'" >&2; return 1; }
+    target=$(alive_servers | sed -n "${n}p")
+    if [ -z "$target" ]; then
+        tmux display-message ${client:+-c "$client"} "tmx: no server number $n"
+        return 0
+    fi
+    [ "$target" = "$(current_server)" ] && return 0
+    switch_client "$target" "$client"
+}
+
+# display-menu: switch to a server (1-9), create one (n), or kill one (x)
+menu() {
+    local client=$1 cur n i=0 key flag mark wins
+    local -a args=()
+    cur=$(current_server)
+    while read -r n; do
+        i=$((i + 1))
+        key=; [ "$i" -le 9 ] && key=$i
+        wins=$(srv "$n" list-windows -a 2>/dev/null | wc -l)
+        flag=; srv "$n" list-windows -a -F '#{window_bell_flag}' 2>/dev/null | grep -q 1 && flag=' !'
+        mark=' '; [ "$n" = "$cur" ] && mark='*'
+        args+=("$mark $n ($wins windows)$flag" "$key" "run-shell \"$SELF --switch $n $client\"")
+    done < <(alive_servers)
+    args+=("" "" ""
+        "New server..." n "command-prompt -p 'new server name:' \"run-shell '$SELF --switch %1 $client'\""
+        "Kill server..." x "run-shell \"$SELF --menu-kill $client\"")
+    tmux display-menu -c "$client" -T "tmux servers" -x C -y C "${args[@]}"
+}
+
+# display-menu of servers that can be killed (every running server except the current one)
+menu_kill() {
+    local client=$1 cur n i=0 key
+    local -a args=()
+    cur=$(current_server)
+    while read -r n; do
+        [ "$n" = "$cur" ] && continue
+        i=$((i + 1))
+        key=; [ "$i" -le 9 ] && key=$i
+        args+=("$n" "$key" "confirm-before -p 'kill tmux server $n and ALL its processes? (y/n)' \"run-shell '$SELF --kill $n'\"")
+    done < <(alive_servers)
+    if [ "${#args[@]}" -eq 0 ]; then
+        tmux display-message -c "$client" "tmx: no other server to kill"
+        return 0
+    fi
+    tmux display-menu -c "$client" -T "kill which server?" -x C -y C "${args[@]}"
+}
+
+kill_server() {
+    valid_name "$1" || return 1
+    if [ "$1" = "$(current_server)" ]; then
+        echo "tmx: refusing to kill the current server '$1' (switch away first)" >&2
+        return 1
+    fi
+    srv "$1" kill-server && tmux display-message "tmx: killed server $1"
+}
+
+# status-bar string: current server highlighted, others with window count and bell flag
+status() {
+    local cur n w cnt out=""
+    cur=$(name_of "$(basename "$1")")
+    while read -r n; do
+        if [ "$n" = "$cur" ]; then
+            out+="#[fg=colour255,bg=colour27,bold] $n #[default] "
+        else
+            w=$(srv "$n" list-windows -a -F '#{window_bell_flag}' 2>/dev/null)
+            cnt=$(printf '%s\n' "$w" | grep -c .)
+            out+="#[fg=colour250]$n($cnt)"
+            grep -q 1 <<<"$w" && out+="#[fg=colour196,bold]!"
+            out+="#[default] "
+        fi
+    done < <(alive_servers)
+    printf '%s' "$out"
+}
+
+list() {
+    local cur n wins clients mark
+    cur=$(current_server)
+    while read -r n; do
+        wins=$(srv "$n" list-windows -a 2>/dev/null | wc -l)
+        clients=$(srv "$n" list-clients 2>/dev/null | wc -l)
+        mark=' '; [ "$n" = "$cur" ] && mark='*'
+        printf '%s %-12s windows=%-3s clients=%s\n' "$mark" "$n" "$wins" "$clients"
+    done < <(alive_servers)
+}
+
+case "${1:-}" in
+    "")          list ;;
+    -h|--help)   usage ;;
+    --attach)    attach "${2:?server name}" ;;
+    --switch)    switch_client "${2:?server name}" "${3:-}" ;;
+    --cycle)     cycle "${2:?next|prev}" "${3:-}" ;;
+    --status)    status "${2:?socket_path}" ;;
+    --menu)      menu "${2:?client}" ;;
+    --menu-kill) menu_kill "${2:?client}" ;;
+    --kill)      kill_server "${2:?server name}" ;;
+    --nth)       nth "${2:?number}" "${3:-}" ;;
+    -*)          usage 1 >&2 ;;
+    *)           if [ -n "$TMUX" ]; then switch_client "$1" ""; else attach "$1"; fi ;;
+esac
