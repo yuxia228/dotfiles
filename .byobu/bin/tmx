@@ -16,6 +16,11 @@
 SELF=$(readlink -f "$0")
 SOCK_DIR="${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)"
 
+# status-bar colours (current server tab / other servers)
+CUR_BG=colour30
+CUR_FG=colour255
+OTHER_FG=colour250
+
 usage() {
     sed -n '2,15p' "$SELF" | sed 's/^# \{0,1\}//'
     exit "${1:-0}"
@@ -147,11 +152,11 @@ status() {
     cur=$(name_of "$(basename "$1")")
     while read -r n; do
         if [ "$n" = "$cur" ]; then
-            out+="#[fg=colour255,bg=colour27,bold] $n #[default] "
+            out+="#[fg=$CUR_FG,bg=$CUR_BG,bold] $n #[default] "
         else
             w=$(srv "$n" list-windows -a -F '#{window_bell_flag}' 2>/dev/null)
             cnt=$(printf '%s\n' "$w" | grep -c .)
-            out+="#[fg=colour250]$n($cnt)"
+            out+="#[fg=$OTHER_FG]$n($cnt)"
             grep -q 1 <<<"$w" && out+="#[fg=colour196,bold]!"
             out+="#[default] "
         fi
