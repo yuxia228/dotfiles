@@ -35,7 +35,6 @@ autoload -Uz _zinit
 ###########
 zinit load zsh-users/zsh-completions
 zinit load zsh-users/zsh-autosuggestions
-zinit load zsh-users/zsh-syntax-highlighting
 # avoid heavy plugins for low-spec devices
 if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
     zinit load zdharma-continuum/fast-syntax-highlighting
@@ -50,6 +49,8 @@ if [[ "$(uname -a | grep -E ${LOW_SPEC_DEVICES})" == "" ]]; then
         export NVM_LAZY_LOAD=true
         zinit load lukechilds/zsh-nvm
     }
+else
+    zinit load zsh-users/zsh-syntax-highlighting
 fi
 ################################
 # Function
