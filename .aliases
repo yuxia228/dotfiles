@@ -43,3 +43,6 @@ alias opencode='opencode --auto'
 alias llm-main='opencode --auto --model main/main'
 alias llm-sub='opencode --auto --model sub/sub'
 
+# for helmes agents
+alias install_hermes='curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash && hermes plugins install claude-subscription-directsdk'
+
