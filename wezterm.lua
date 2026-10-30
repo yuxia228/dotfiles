@@ -44,7 +44,7 @@ wezterm.on(
 
 return {
     default_prog = {
-        "wsl.exe", "~",
+        "powershell.exe",
     },
     font = wezterm.font_with_fallback({
         "Ricty Diminished",
