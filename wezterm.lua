@@ -26,7 +26,13 @@ wezterm.on(
 
     -- ensure that the titles fit in the available space,
     -- and that we have room for the edges.
-    local title = wezterm.truncate_right(tab.active_pane.title, max_width - 2)
+    -- local title = wezterm.truncate_right(tab.active_pane.title, max_width - 2)
+    local host = title:match("@([^:]+):")
+    if host then
+        title = host
+    end
+
+    title = wezterm.truncate_right(title, max_width - 2)
 
     return {
       { Background = { Color = edge_background } },

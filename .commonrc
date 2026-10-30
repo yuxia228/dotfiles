@@ -62,6 +62,9 @@ if [[ -f "${HOME}/.ssh/agent-env" ]]; then
     ssh-add -l > /dev/null || ssh-add
 fi
 
+# For wezterm, notify hostname
+printf '\033]0;%s\007' "$(hostname -s)"
+
 # Functions
 csv_viewer () {
     column -s, -t < $1 | less -#2 -N -S
