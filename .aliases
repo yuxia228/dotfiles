@@ -16,7 +16,7 @@ alias git_latest_tag='git describe --abbrev=0 --tags'
 alias dd='dd status=progress'
 alias sshh="ssh -o 'StrictHostKeyChecking no'"
 alias maintmux="tmux -u a -t main || tmux -u new -s main"
-alias tmptmux="tmux kill-session -t tmp; tmux -u new -s tmp"
+alias tmptmux="tmux -L tmp kill-server 2>/dev/null; tmux -L tmp -f ~/.byobu/tmp.tmux -u new -s tmp"
 which batcat 2>&1 > /dev/null
 if [[ "$?" == "0" ]]; then
     alias bat='batcat'
